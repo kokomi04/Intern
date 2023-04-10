@@ -13,11 +13,14 @@ namespace Intern.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AccountShipContactId { get; set; } 
-
         public int AccountId { get; set; }
         public int AccountShipContactStatusId { get; set; }
         public string ReceiverName { get; set; }
         public string AccountDetailAddress { get; set; }
         public string AccountPhoneNumber { get; set; }
+
+        public Account Account { get; set; }
+        public AccountShipContactStatus AccountShipContactStatus { get; set; }
+        public Bill Bill { get; set; }
     }
 }

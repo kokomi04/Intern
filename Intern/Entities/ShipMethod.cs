@@ -19,5 +19,7 @@ namespace Intern.Entities
         [MaxLength(100)]
         public string ShipMethodName { get; set; }
         public int ShipPrice { get; set; }
+
+        public List<Bill> Bills { get; set; }
     }
 }

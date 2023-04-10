@@ -16,5 +16,8 @@ namespace Intern.Entities
         public int AccountId { get; set; }
         public int ProductId { get; set; }
         public int StarVoted { get; set; }
+
+        public Account Account { get; set; }
+        public Product Product { get; set; }
     }
 }

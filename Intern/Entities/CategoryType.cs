@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string CategoryTypeCode { get; set; }
         [MaxLength(100)]
         public string CategoryTypeDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

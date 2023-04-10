@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string AccountStatusCode { get; set; }
         [MaxLength(100)]
         public string AccountStatusDetail { get; set; }
+
+        public List<Account> Accounts { get; set; }
     }
 }
