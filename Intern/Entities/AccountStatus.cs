@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class AccountStatus
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int AccountStatusId { get; set; } 
 
         [MaxLength(20)]
         public string AccountStatusCode { get; set; }
         [MaxLength(100)]
         public string AccountStatusDetail { get; set; }
+
+        public List<Account> Accounts { get; set; }
     }
 }

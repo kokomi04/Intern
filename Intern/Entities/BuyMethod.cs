@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class BuyMethod
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BuyMethodId { get; set; } 
 
         [MaxLength(20)]
         public string BuyMethodCode { get; set; }
         [MaxLength(100)]
         public string BuyMethodName { get; set; }
+
+        public List<Bill> Bills { get; set; }
     }
 }

@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class CategoryType
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CategoryTypeId { get; set; } 
 
         [MaxLength(20)]
         public string CategoryTypeCode { get; set; }
         [MaxLength(100)]
         public string CategoryTypeDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

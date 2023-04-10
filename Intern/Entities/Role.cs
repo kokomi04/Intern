@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class Role
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int RoleId { get; set; } 
 
         [MaxLength(20)]
         public string RoleCode { get; set; }
         [MaxLength(100)]
         public string RoleDetail { get; set; }
+
+        public List<Account> Accounts { get; set; }
     }
 }

@@ -11,20 +11,27 @@ namespace Intern.Entities
     public class Bill
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BillId { get; set; } 
         public int AccountShipContactId { get; set; }
         public int BuyMethodId { get; set; }
         public int BillStatusId { get; set; }
         public int ShipMethodId { get; set; }
-        public int IdNv { get; set; }
+    //    public int IdNv { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? ShipToBuyerDate { get; set; }
         public DateTime? ReceivedDate { get; set; }
         public DateTime? CloseDate { get; set; }
         public DateTime? ProductReturnDate { get; set; } = null;
         public string BuyerNotification { get; set; }
-        public double ShipPrice { get; set; }
+        public int ShipPrice { get; set; }
         public string BillCode { get; set; }
+
+        public List<BillDetail> BillDetail { get; set; }
+        public List<BillSales> BillSales { get; set; }
+        public BuyMethod BuyMethod { get; set; }
+        public BillStatus BillStatus { get; set; }
+        public ShipMethod ShipMethod { get; set; }
+        public AccountShipContact AccountShipContact { get; set; }
     }
 }

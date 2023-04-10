@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class Producer
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProducerId { get; set; } 
 
         [MaxLength(20)]
         public string ProducerCode { get; set; }
         [MaxLength(100)]
         public string ProducerDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class Color
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ColorId { get; set; } 
 
         [MaxLength(20)]
         public string ColorCode { get; set; }
         [MaxLength(100)]
         public string ColorDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

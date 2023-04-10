@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class ShipMethod
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ShipMethodId { get; set; } 
 
         [MaxLength(20)]
@@ -19,5 +19,7 @@ namespace Intern.Entities
         [MaxLength(100)]
         public string ShipMethodName { get; set; }
         public int ShipPrice { get; set; }
+
+        public List<Bill> Bills { get; set; }
     }
 }

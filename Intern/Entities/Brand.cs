@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class Brand
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BrandId { get; set; } 
 
         [MaxLength(20)]
         public string BrandCode { get; set; }
         [MaxLength(100)]
         public string BrandDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

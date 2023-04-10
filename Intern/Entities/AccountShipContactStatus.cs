@@ -11,13 +11,13 @@ namespace Intern.Entities
     public class AccountShipContactStatus
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AccountShipContactStatusId { get; set; }
-        public int AccountShipContactId { get; set; } 
-
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int AccountShipContactStatusId { get; set; } 
         [MaxLength(20)]
-        public string AccountShipContactCode { get; set; }
+        public string AccountShipContactStatusCode { get; set; }
         [MaxLength(100)]
-        public string AccountShipContactDetail { get; set; }
+        public string AccountShipContactStatusDetail { get; set; }
+
+        public List<AccountShipContact> AccountShipContacts { get; set; }
     }
 }

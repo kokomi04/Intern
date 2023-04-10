@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class ProductStatus
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProductStatusId { get; set; } 
 
         [MaxLength(20)]
         public string ProductStatusCode { get; set; }
         [MaxLength(100)]
         public string ProductStatusDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

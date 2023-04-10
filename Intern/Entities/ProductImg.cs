@@ -11,10 +11,12 @@ namespace Intern.Entities
     public class ProductImg
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProductImgId { get; set; } 
         public int ProductId { get; set; }
         public int CountImg { get; set; }
-        public string ProductImage { get; set; }
+        public byte[] ProductImage { get; set; }
+
+        public Product Product { get; set; }
     }
 }

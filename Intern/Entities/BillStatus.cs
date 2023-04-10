@@ -11,12 +11,14 @@ namespace Intern.Entities
     public class BillStatus
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BillStatusId { get; set; } 
 
         [MaxLength(20)]
         public string BillStatusCode { get; set; }
         [MaxLength(100)]
         public string BillStatusDetail { get; set; }
+
+        public List<Bill> Bills { get; set; }
     }
 }

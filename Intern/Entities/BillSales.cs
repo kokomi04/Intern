@@ -11,9 +11,12 @@ namespace Intern.Entities
     public class BillSales
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BillSalesId { get; set; } 
         public int BillId { get; set; }
         public int SalesId { get; set; }
+
+        public Bill Bill { get; set; }
+        public Sales Sales { get; set; }
     }
 }
