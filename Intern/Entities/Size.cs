@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string SizeCode { get; set; }
         [MaxLength(50)]
         public string SizeDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

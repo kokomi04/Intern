@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string ColorCode { get; set; }
         [MaxLength(100)]
         public string ColorDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

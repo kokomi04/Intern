@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string SalesStatusCode { get; set; }
         [MaxLength(100)]
         public string SalesStatusDetail { get; set; }
+
+        public List<Sales> Sales { get; set; }
     }
 }

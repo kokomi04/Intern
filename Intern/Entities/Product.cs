@@ -27,5 +27,17 @@ namespace Intern.Entities
         public double ShellPrice { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set;}
+
+        public List<ProductImg> ProductImgs { get; set; }
+        public List<BillDetail> BillDetails { get; set; }
+        public List<VoteStar> VoteStars { get; set; }
+        public List<AccountBag> AccountBags { get; set; }
+
+        public Size Size { get; set; }
+        public Color Color { get; set; }
+        public Brand Brand { get; set; }
+        public CategoryType CategoryType { get; set; }
+        public ProductStatus ProductStatus { get; set; }
+        public Producer Producer { get; set; }
     }
 }
