@@ -19,5 +19,9 @@ namespace Intern.Entities
         public string ReceiverName { get; set; }
         public string AccountDetailAddress { get; set; }
         public string AccountPhoneNumber { get; set; }
+
+        public Account Account { get; set; }
+        public AccountShipContactStatus AccountShipContactStatus { get; set; }
+        public Bill Bill { get; set; }
     }
 }

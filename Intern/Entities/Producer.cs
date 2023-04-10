@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string ProducerCode { get; set; }
         [MaxLength(100)]
         public string ProducerDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

@@ -23,5 +23,12 @@ namespace Intern.Entities
         public DateTime AccountCreateDate { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
+
+        public List<VoteStar> VoteStars { get; set; }
+        public List<AccountBag> AccountBags { get; set; }
+        public List<AccountShipContact> AccountShipContacts { get; set; }
+        public AccountStatus AccountStatus { get; set; }
+        public Role Role { get; set; }
+
     }
 }

@@ -7,16 +7,17 @@ using System.Text;
 
 namespace Intern.Entities
 {
-    [Table("ProductStatus")]
-    public class ProductStatus
+    [Table("AccountShipContactStatus")]
+    public class AccountShipContactStatus
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProductStatusId { get; set; } 
-
+        public int AccountShipContactStatusId { get; set; } 
         [MaxLength(20)]
-        public string ProductStatusCode { get; set; }
+        public string AccountShipContactStatusCode { get; set; }
         [MaxLength(100)]
-        public string ProductStatusDetail { get; set; }
+        public string AccountShipContactStatusDetail { get; set; }
+
+        public List<AccountShipContact> AccountShipContacts { get; set; }
     }
 }

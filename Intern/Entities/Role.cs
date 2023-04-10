@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string RoleCode { get; set; }
         [MaxLength(100)]
         public string RoleDetail { get; set; }
+
+        public List<Account> Accounts { get; set; }
     }
 }

@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string BrandCode { get; set; }
         [MaxLength(100)]
         public string BrandDetail { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }

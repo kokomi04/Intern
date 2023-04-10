@@ -15,5 +15,8 @@ namespace Intern.Entities
         public int BillSalesId { get; set; } 
         public int BillId { get; set; }
         public int SalesId { get; set; }
+
+        public Bill Bill { get; set; }
+        public Sales Sales { get; set; }
     }
 }

@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string BillStatusCode { get; set; }
         [MaxLength(100)]
         public string BillStatusDetail { get; set; }
+
+        public List<Bill> Bills { get; set; }
     }
 }

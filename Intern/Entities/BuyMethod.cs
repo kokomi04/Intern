@@ -18,5 +18,7 @@ namespace Intern.Entities
         public string BuyMethodCode { get; set; }
         [MaxLength(100)]
         public string BuyMethodName { get; set; }
+
+        public List<Bill> Bills { get; set; }
     }
 }
