@@ -23,8 +23,8 @@ namespace Intern.Entities
         public string ProductName { get; set; }
         public string ProductDetail { get; set; }
         public int Quantity { get; set; }
-        public double Price { get; set; }
-        public double ShellPrice { get; set; }
+        public int Price { get; set; }
+        public int ShellPrice { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set;}
 

@@ -17,7 +17,7 @@ namespace Intern.Entities
         public int SalesTypeId { get; set; }
         public string SalesCode { get; set; }
         public string SalesName { get; set; }
-        public int SalesPersen { get; set; }
+        public int? SalesPersen { get; set; }
         public int SaleInt { get; set; }
         public DateTime OpenDate { get; set; }
         public DateTime? EndDate { get; set; }

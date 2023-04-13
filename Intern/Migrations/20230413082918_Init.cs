@@ -214,13 +214,13 @@ namespace Intern.Migrations
                 {
                     AccountId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountUserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccountPassWord = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountUserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AccountPassWord = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     AccountStatusId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     AccountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountBorn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AccountDetailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountDetailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountCreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -252,7 +252,7 @@ namespace Intern.Migrations
                     SalesTypeId = table.Column<int>(type: "int", nullable: false),
                     SalesCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SalesName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SalesPersen = table.Column<int>(type: "int", nullable: false),
+                    SalesPersen = table.Column<int>(type: "int", nullable: true),
                     SaleInt = table.Column<int>(type: "int", nullable: false),
                     OpenDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -289,8 +289,8 @@ namespace Intern.Migrations
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ProductDetail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false),
-                    ShellPrice = table.Column<double>(type: "float", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    ShellPrice = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -399,7 +399,7 @@ namespace Intern.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     CountImg = table.Column<int>(type: "int", nullable: false),
-                    ProductImage = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProductImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -449,14 +449,13 @@ namespace Intern.Migrations
                     BuyMethodId = table.Column<int>(type: "int", nullable: false),
                     BillStatusId = table.Column<int>(type: "int", nullable: false),
                     ShipMethodId = table.Column<int>(type: "int", nullable: false),
-                    IdNv = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShipToBuyerDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CloseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ProductReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     BuyerNotification = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShipPrice = table.Column<double>(type: "float", nullable: false),
+                    ShipPrice = table.Column<int>(type: "int", nullable: false),
                     BillCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -497,7 +496,7 @@ namespace Intern.Migrations
                     BillId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
+                    Price = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

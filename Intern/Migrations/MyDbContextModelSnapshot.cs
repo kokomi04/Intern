@@ -37,7 +37,6 @@ namespace Intern.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("AccountDetailAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AccountName")
@@ -46,14 +45,16 @@ namespace Intern.Migrations
 
                     b.Property<string>("AccountPassWord")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("AccountStatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("AccountUserName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("datetime2");
@@ -211,9 +212,6 @@ namespace Intern.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("IdNv")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("ProductReturnDate")
                         .HasColumnType("datetime2");
 
@@ -223,8 +221,8 @@ namespace Intern.Migrations
                     b.Property<int>("ShipMethodId")
                         .HasColumnType("int");
 
-                    b.Property<double>("ShipPrice")
-                        .HasColumnType("float");
+                    b.Property<int>("ShipPrice")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ShipToBuyerDate")
                         .HasColumnType("datetime2");
@@ -254,8 +252,8 @@ namespace Intern.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -453,8 +451,8 @@ namespace Intern.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProducerId")
                         .HasColumnType("int");
@@ -473,8 +471,8 @@ namespace Intern.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<double>("ShellPrice")
-                        .HasColumnType("float");
+                    b.Property<int>("ShellPrice")
+                        .HasColumnType("int");
 
                     b.Property<int>("SizeId")
                         .HasColumnType("int");
@@ -513,9 +511,9 @@ namespace Intern.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ProductImage")
+                    b.Property<byte[]>("ProductImage")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("ProductImgId");
 
@@ -595,7 +593,7 @@ namespace Intern.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SalesPersen")
+                    b.Property<int?>("SalesPersen")
                         .HasColumnType("int");
 
                     b.Property<int>("SalesStatusId")
