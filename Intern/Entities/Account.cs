@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class Account
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AccountId { get; set; }
         [MaxLength(50)]
         public string AccountUserName { get; set; }

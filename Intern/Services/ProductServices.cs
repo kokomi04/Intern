@@ -2,8 +2,12 @@
 using Intern.EF;
 using Intern.Entities;
 using Intern.ViewModels;
+using Intern.ViewModels.Authen;
+using Intern.ViewModels.ChangeAccount;
 using Intern.ViewModels.PagingCommon;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 
 namespace Intern.Services
@@ -18,80 +22,208 @@ namespace Intern.Services
         }
 
 
-        //public async Task<PageResult<Product>> GetProductDetails(ProductPagingRequest request)
-        //{
-        //    var productDetails = new List<Product>();
-
-        //    var parentProductDetails = _context.Products.Where(x => x.ParentId != null);
-
-        //    if (!String.IsNullOrEmpty(request.keyWord))
-        //        parentProductDetails = parentProductDetails.Where(x => x.ProductDetailName.Contains(request.keyWord));
-
-        //    if (request.MinPrice.HasValue)
-        //        parentProductDetails = parentProductDetails.Where(x => x.Price >= request.MinPrice);
-
-        //    if (request.MaxPrice.HasValue)
-        //        parentProductDetails = parentProductDetails.Where(x => x.Price <= request.MaxPrice);
-
-        //    var lst = parentProductDetails.ToList();
-
-        //    if (lst.Count() > 0)
-        //        foreach (var item in lst)
-        //        {
-        //            var pd = lst.Find(x => x.ParentId == item.ProductDetailId);
-
-        //            if (pd == null)
-        //            {
-        //                productDetails.Add(item);
-        //            }
-        //        }
-
-        //    int totalRecord = productDetails.Count();
-
-        //    int totalPage = (productDetails.Count() % request.PageSize > 0) ? productDetails.Count() / request.PageSize + 1 : productDetails.Count() / request.PageSize;
-
-        //    productDetails = productDetails.Skip(request.PageSize * (request.PageIndex - 1)).Take(request.PageSize).ToList();
-
-        //    var pageResult = new PageResult<ProductDetail>()
-        //    {
-        //        Data = productDetails,
-        //        TotalPage = totalPage,
-        //        TotalRecord = totalRecord,
-        //    };
-
-        //    return pageResult;
-        //}
-
-        public async Task<PageResult<Product>> NextPage(int pageIndex = 1)
+        public async Task<List<Product>> NextPage(int pageIndex)
         {
             var products = _context.Products.AsQueryable();
-            int totalRecords = products.Count();
-            int totalPages;
-            if (products.Count() % 5 == 0)
-                totalPages = products.Count() / 5;
-            else
-                totalPages = products.Count() / 5 + 1;
 
-            var data = products.Skip((5 * (pageIndex - 1))).Take(5).ToList();
+            var data = await products.Skip((5 * (pageIndex - 1))).Take(5).ToListAsync();
 
-            var pageResult = new PageResult<Product>()
+            return data;
+        }
+
+        public async Task<List<Product>> SearchProduct(string search)
+        {
+            var products = _context.Products.AsQueryable();
+            if(!search.IsNullOrEmpty())
             {
-                TotalPage = totalPages,
-                TotalRecord = totalRecords,
-                Data = data
-            };
-            return pageResult;
+                products = products.Where(x=>x.ProductName.Contains(search));
+            }
+            return await products.ToListAsync();
         }
 
         public async Task<List<Product>> GetProductHome()
         {
             return await _context.Products.ToListAsync();
         }
-
-        public async Task<Account> CheckLogin(SignInRequest request)
+        public async Task<ProductDetail> GetProductId(int productId)
         {
-            var acc = _context.Accounts.FirstOrDefault(x => (x.AccountUserName == request.UserName) & x.AccountPassWord == request.Password);
-            return acc;
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == productId);
+            if (product == null) return null;
+
+            var brand = await _context.Brands.FirstOrDefaultAsync(x => x.BrandId == product.BrandId);
+            var producer = await _context.Producers.FirstOrDefaultAsync(x => x.ProducerId == product.ProducerId);
+            var size = await _context.Sizes.FirstOrDefaultAsync(x => x.SizeId == product.SizeId);
+            var color = await _context.Colors.FirstOrDefaultAsync(x => x.ColorId == product.ColorId);
+            var category = await _context.CategoryTypes.FirstOrDefaultAsync(x => x.CategoryTypeId == product.CategoryTypeId);
+
+            var productDetail = new ProductDetail()
+            {
+                product = product,
+                brand = brand,
+                producer = producer,
+                size = size,
+                color = color,
+                categoryType=category
+            };
+
+            return productDetail;
         }
+
+        public async Task AddProductToBag(AddProToBagRequest request)
+        {
+            using (var trans = await _context.Database.BeginTransactionAsync())
+            {
+                var accountBagId=0;
+                if (await _context.AccountBags.FirstOrDefaultAsync()!=null)
+                    accountBagId = await _context.AccountBags.MaxAsync(x => x.AccountId);
+                var accountBag = new AccountBag()
+                {
+                    AccountBagId = accountBagId + 1,
+                    AccountId = request.AccountId,
+                    ProductId = request.ProductId,
+                    Quantity = request.Quantity,
+                };
+                await _context.AccountBags.AddAsync(accountBag);
+                await _context.SaveChangesAsync();
+                await trans.CommitAsync();
+            }
+        }
+
+        public async Task<List<GetProductBagResponse>> GetProductBagByAccountId(int accountId)
+        {
+            var result = new List<GetProductBagResponse>();
+            var accountBag = await _context.AccountBags.Where(x=>x.AccountId== accountId).ToListAsync();
+            if (accountBag.Count == 0)
+                return null;
+            foreach (var item in accountBag)
+            {
+                var product = await _context.Products.FindAsync(item.ProductId);
+                var categoryType = await _context.CategoryTypes.FindAsync(product.CategoryTypeId);
+                var productBag = new GetProductBagResponse()
+                {
+                    Product = product,
+                    CategoryType = categoryType,
+                    AccountBag = item
+                };
+                result.Add(productBag);
+            }
+            return result;
+        }
+
+        public async Task<List<Product>> DressCategory()
+        {
+            var products = await _context.Products.Where(x => x.CategoryTypeId == 1).ToListAsync();
+
+            return products;
+        }
+        public async Task<List<Product>> PanCategory()
+        {
+            var products = await _context.Products.Where(x => x.CategoryTypeId == 2).ToListAsync();
+
+            return products;
+        }
+        public async Task<List<Product>> ShirtCategory()
+        {
+            var products = await _context.Products.Where(x => x.CategoryTypeId == 3).ToListAsync();
+
+            return products;
+        }
+
+        public async Task<SignInResponse> CheckLogin(SignInRequest request)
+        {
+            var acc = _context.Accounts.FirstOrDefault(x => (x.AccountUserName == request.UserName) & x.AccountPassWord == request.userPass);
+            if (acc == null)
+                return null;
+            var lstShipContacts = await _context.AccountShipContacts.Where(x => x.AccountId == acc.AccountId).ToListAsync();
+            var kq = new SignInResponse()
+            {
+                Id = acc.AccountId,
+                Name = acc.AccountName,
+                Address = acc.AccountDetailAddress,
+                Born = acc.AccountBorn,
+                RoleID = acc.RoleId,
+                Sdt = "0333961530",
+                ShipContacts = lstShipContacts
+            };
+            return kq;
+        }
+
+        public async Task<SignUpRequest> CreateAccount(SignUpRequest request)
+        {
+            using (var trans = await _context.Database.BeginTransactionAsync())
+            {
+                int maxId = _context.Accounts.Max(x => x.AccountId);
+                if (_context.Accounts.Any(x => x.AccountUserName == request.userName))
+                {
+                    request.status = 1;
+                    return request;
+                }
+
+                var acc = new Account()
+                {
+                    AccountId = maxId + 1,
+                    AccountUserName = request.userName,
+                    AccountName = request.name,
+                    AccountPassWord = request.userPass,
+                    AccountStatusId = 1,
+                    AccountCreateDate = DateTime.Now,
+                    AccountStatus = await _context.AccountStatuses.FindAsync(1),
+                    RoleId = 3,
+                    Role = await _context.Roles.FindAsync(3),
+                    CreateDate = DateTime.Now,
+                };
+                await _context.AddAsync(acc);
+                await _context.SaveChangesAsync();
+                await trans.CommitAsync();
+                return request;
+            }
+
+        }
+        public async Task<AccountCustom> GetContacts(int accountId)
+        {
+            var acc = await _context.Accounts.FindAsync(accountId);
+            if (acc == null)
+                return null;
+            var accShipContacts = await _context.AccountShipContacts.Where(x => x.AccountId == accountId).ToListAsync();
+            var accCus = new AccountCustom()
+            {
+                Id = accountId,
+                sdt = "",
+                address = acc.AccountDetailAddress,
+                born = acc.AccountBorn,
+                name = acc.AccountName,
+                roleID = acc.RoleId,
+                shipContacts = accShipContacts,
+            };
+            return accCus;
+        }
+
+        public async Task<RepassResponse> RePass(RepassRequest request)
+        {
+            var acc = await _context.Accounts.FindAsync(request.accountId);
+            if (acc == null)
+                return new RepassResponse(1, "Tai khoan khong ton tai");
+            if (acc.AccountPassWord != request.oldPass)
+                return new RepassResponse(2, "Mat khau sai");
+            acc.AccountPassWord = request.newPass;
+            _context.Accounts.Update(acc);
+            await _context.SaveChangesAsync();
+            return new RepassResponse(3, "Thay doi mat khau thanh cong");
+        }
+        public async Task<ReInfoRequest> ReInfo(ReInfoRequest request)
+        {
+            var acc = await _context.Accounts.FindAsync(request.accountId);
+            if (acc == null)
+                return null;
+
+            acc.AccountName = request.name;
+            acc.AccountBorn = request.born;
+            acc.AccountDetailAddress= request.address;
+            
+            _context.Accounts.Update(acc); 
+            await _context.SaveChangesAsync();
+            return request;
+        }
+
     }
 }

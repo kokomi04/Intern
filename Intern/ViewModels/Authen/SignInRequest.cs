@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Intern.ViewModels
+namespace Intern.ViewModels.Authen
 {
     public class SignInRequest
     {
         [Required]
         public string UserName { get; set; } = null!;
         [Required]
-        public string Password { get; set; } = null!;
+        public string userPass { get; set; } = null!;
     }
 }
