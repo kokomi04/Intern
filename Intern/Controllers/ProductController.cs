@@ -95,6 +95,14 @@ namespace Intern.Controllers
                 return NotFound();
             return Ok(result);
         }
+        [HttpDelete("deleteaccountbag")]
+        public async Task<IActionResult> DeleteBag(int accountBagId)
+        {
+            var result = await _services.DeleteBag(accountBagId);
+            if (result == 0)
+                return BadRequest();
+            return Ok();
+        }
 
         [HttpGet("checklogin")]
         public async Task<IActionResult> CheckLogin([FromQuery]SignInRequest request)

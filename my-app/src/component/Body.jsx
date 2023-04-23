@@ -160,16 +160,16 @@ function ProductItem({ item, key }) {
   let color = item.colorId;
   resultPrice = resultPrice.split("").reverse().join("");
   const thisProduct = useRef(0);
-  // useEffect(() => {
-  //   thisProduct.current.onmouseover = () => {
-  //     thisProduct.current.childNodes[0].src =
-  //       "data:image/jpeg;base64," + item.productImgs[1].productImg;
-  //   };
-  //   thisProduct.current.onmouseout = () => {
-  //     thisProduct.current.childNodes[0].src =
-  //       "data:image/jpeg;base64," + item.productImgs[0].productImg;
-  //   };
-  // }, []);
+  useEffect(() => {
+    thisProduct.current.onmouseover = () => {
+      thisProduct.current.childNodes[0].src =
+        "data:image/jpeg;base64," + item.productImgs[1].productImg;
+    };
+    thisProduct.current.onmouseout = () => {
+      thisProduct.current.childNodes[0].src =
+        "data:image/jpeg;base64," + item.productImgs[0].productImg;
+    };
+  }, []);
   return (
     <>
       <div
@@ -177,11 +177,11 @@ function ProductItem({ item, key }) {
         ref={thisProduct}
         id={item.productId}
       >
-        {/* <img
+        <img
           className="product-image"
           src={"data:image/jpeg;base64," + item.productImgs[0].productImg}
           alt=""
-        ></img>{" "} */}
+        ></img>{" "}
         <span className="product-price">{resultPrice + "đ"}</span>
         <br></br>
         <span className="product-detail-name">{item.productName}</span>
