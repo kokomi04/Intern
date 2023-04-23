@@ -8,14 +8,13 @@ using System.Text;
 namespace Intern.Entities
 {
     [Table("ProductImgs")]
-    public class ProductImg
+    public class ProductImgs
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductImgId { get; set; } 
         public int ProductId { get; set; }
-        public int CountImg { get; set; }
-        public byte[] ProductImage { get; set; }
+        public byte[] ProductImg { get; set; }
 
         public Product Product { get; set; }
     }

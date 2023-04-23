@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intern.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230419132546_FixAccountid")]
-    partial class FixAccountid
+    [Migration("20230423081131_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,10 +28,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Account", b =>
                 {
                     b.Property<int>("AccountId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountId"));
 
                     b.Property<DateTime?>("AccountBorn")
                         .HasColumnType("datetime2");
@@ -64,6 +61,10 @@ namespace Intern.Migrations
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Sdt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
@@ -458,18 +459,18 @@ namespace Intern.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Intern.Entities.ProductImg", b =>
+            modelBuilder.Entity("Intern.Entities.ProductImgs", b =>
                 {
                     b.Property<int>("ProductImgId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CountImg")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductImgId"));
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ProductImage")
+                    b.Property<byte[]>("ProductImg")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
@@ -847,7 +848,7 @@ namespace Intern.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("Intern.Entities.ProductImg", b =>
+            modelBuilder.Entity("Intern.Entities.ProductImgs", b =>
                 {
                     b.HasOne("Intern.Entities.Product", "Product")
                         .WithMany("ProductImgs")

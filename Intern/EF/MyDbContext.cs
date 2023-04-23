@@ -17,7 +17,7 @@ namespace Intern.EF
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductImg> ProductImgs { get; set; }
+        public DbSet<ProductImgs> ProductImgs { get; set; }
         public DbSet<CategoryType> CategoryTypes { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Color> Colors { get; set; }

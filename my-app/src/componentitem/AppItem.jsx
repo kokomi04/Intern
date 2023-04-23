@@ -98,7 +98,7 @@ function AppItem({ changeHideLogin }) {
       <div className="item-full-layout">
         <div className="half-width product-imgs">
           <div className="float-left list-img">
-            {/* <img
+            <img
               className="img-0"
               src={
                 productDetail
@@ -123,10 +123,10 @@ function AppItem({ changeHideLogin }) {
               onClick={function () {
                 changImg(1);
               }}
-            ></img> */}
+            ></img>
           </div>
           <div className="float-left current-img">
-            {/* <img
+            <img
               ref={imgMain}
               className="imgMain"
               src={
@@ -136,7 +136,7 @@ function AppItem({ changeHideLogin }) {
                   : ""
               }
               alt=""
-            ></img> */}
+            ></img>
           </div>
         </div>
         <div className="show-opt-and-add2bag">

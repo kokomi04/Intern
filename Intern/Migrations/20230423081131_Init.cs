@@ -204,6 +204,7 @@ namespace Intern.Migrations
                     AccountStatusId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     AccountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sdt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountBorn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AccountDetailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountCreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -376,10 +377,10 @@ namespace Intern.Migrations
                 name: "ProductImgs",
                 columns: table => new
                 {
-                    ProductImgId = table.Column<int>(type: "int", nullable: false),
+                    ProductImgId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    CountImg = table.Column<int>(type: "int", nullable: false),
-                    ProductImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    ProductImg = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
                 constraints: table =>
                 {

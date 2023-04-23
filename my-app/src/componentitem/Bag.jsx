@@ -186,11 +186,11 @@ function Item({ item, deleteBag, add2ListPay, handleTotalCheckBox, setProduct, i
                 handleTotalCheckBox(a.accountBagId)
               }}
             ></input>
-            {/* <img
+            <img
               src={"data:image/jpeg;base64," + p.productImgs[0].productImg}
               alt=""
               className="product-img"
-            ></img> */}
+            ></img>
             <div className="product-name">{p.productDetail}</div>
           </div>
           <div className="bag-row short-column">{calcul(p.shellPrice) + "đ"}</div>
