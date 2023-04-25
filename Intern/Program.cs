@@ -17,6 +17,7 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(
 
 // Life cycle DI: AddSingleton(), AddTransient(), AddScoped()
 builder.Services.AddTransient<IProductServices, ProductServices>();
+builder.Services.AddTransient<IAdminServices, AdminServices>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

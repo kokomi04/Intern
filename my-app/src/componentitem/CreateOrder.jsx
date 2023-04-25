@@ -52,7 +52,7 @@ function CreateOrder() {
         total = calculResult.orderItems.reduce((total, next) => {
             return total + next.product.shellPrice * next.quantity
         }, 0)
-        setPriceAfterShip(total + calculResult.shipMethods[0].price)
+        setPriceAfterShip(total + calculResult.shipMethods[0].shipPrice)
         setFisrtTimeShow(false)
     }
     async function chooseShipOpt(opt) {
@@ -467,7 +467,7 @@ function OptionShip({ setShowShipName, setShowShip, calculResult, chooseShipOpt 
                                 <div className='ship-create-order-content '>
                                     <span className='ship-opt-name'>{calculResult ? shipMethods[0].shipMethodName : ""}</span>
                                     <span className='ship-opt-receive-date'>Dự kiến nhận hàng sau 5 ngày kể từ ngày đặt.</span>
-                                    <span className='ship-opt-price'>{calculResult ? calcul(ghn) + 'đ' : ""}</span>
+                                    <span className='ship-opt-price'>{calculResult ? calcul(shipMethods[0].shipPrice) + 'đ' : ""}</span>
                                 </div>
                             </div>
                             <div ref={opt2} onClick={() => {
@@ -476,7 +476,7 @@ function OptionShip({ setShowShipName, setShowShip, calculResult, chooseShipOpt 
                                 <div className='ship-create-order-content'>
                                     <span className='ship-opt-name'>{calculResult ? shipMethods[1].shipMethodName : ""}</span>
                                     <span className='ship-opt-receive-date'>Dự kiến nhận hàng trong ngày hoặc từ 1-2 ngày chỉ áp dụng với nội thành Hà Nội.</span>
-                                    <span className='ship-opt-price'>{calculResult ? calcul(shipMethods[1].price) + 'đ' : ""}</span>
+                                    <span className='ship-opt-price'>{calculResult ? calcul(shipMethods[1].shipPrice) + 'đ' : ""}</span>
                                 </div>
                             </div>
                         </div>

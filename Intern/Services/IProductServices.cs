@@ -2,6 +2,7 @@
 using Intern.ViewModels;
 using Intern.ViewModels.Authen;
 using Intern.ViewModels.ChangeAccount;
+using Intern.ViewModels.Order;
 using Intern.ViewModels.PagingCommon;
 
 namespace Intern.Services
@@ -24,5 +25,8 @@ namespace Intern.Services
         Task<RepassResponse> RePass(RepassRequest request);
         Task<ReInfoRequest> ReInfo(ReInfoRequest request);
         Task<AccountCustom> GetContacts(int accountId);
+        Task<AddAccShipContactRequest> AddNewAccountShipContact(AddAccShipContactRequest request);
+        Task<CreateOrder> GetCalculbag(int[] request);
+
     }
 }

@@ -30,6 +30,7 @@ namespace Intern.Entities
         public List<VoteStar> VoteStars { get; set; }
         public List<AccountBag> AccountBags { get; set; }
         public List<AccountShipContact> AccountShipContacts { get; set; }
+        public List<Bill> Bills { get; set; }
         public AccountStatus AccountStatus { get; set; }
         public Role Role { get; set; }
 
