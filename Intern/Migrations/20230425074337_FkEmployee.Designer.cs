@@ -4,6 +4,7 @@ using Intern.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intern.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230425074337_FkEmployee")]
+    partial class FkEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,7 +178,7 @@ namespace Intern.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AccountShipContactId")
+                    b.Property<int>("AccountShipContactId")
                         .HasColumnType("int");
 
                     b.Property<string>("BillCode")
@@ -189,6 +192,7 @@ namespace Intern.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("BuyerNotification")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CloseDate")
@@ -197,7 +201,7 @@ namespace Intern.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IdEmployee")
+                    b.Property<int>("IdEmployee")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ProductReturnDate")
@@ -209,7 +213,7 @@ namespace Intern.Migrations
                     b.Property<int>("ShipMethodId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ShipPrice")
+                    b.Property<int>("ShipPrice")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ShipToBuyerDate")
@@ -218,8 +222,7 @@ namespace Intern.Migrations
                     b.HasKey("BillId");
 
                     b.HasIndex("AccountShipContactId")
-                        .IsUnique()
-                        .HasFilter("[AccountShipContactId] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("BillStatusId");
 
@@ -730,7 +733,9 @@ namespace Intern.Migrations
                 {
                     b.HasOne("Intern.Entities.AccountShipContact", "AccountShipContact")
                         .WithOne("Bill")
-                        .HasForeignKey("Intern.Entities.Bill", "AccountShipContactId");
+                        .HasForeignKey("Intern.Entities.Bill", "AccountShipContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Intern.Entities.BillStatus", "BillStatus")
                         .WithMany("Bills")
@@ -746,7 +751,9 @@ namespace Intern.Migrations
 
                     b.HasOne("Intern.Entities.Account", "Employee")
                         .WithMany("Bills")
-                        .HasForeignKey("IdEmployee");
+                        .HasForeignKey("IdEmployee")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Intern.Entities.ShipMethod", "ShipMethod")
                         .WithMany("Bills")

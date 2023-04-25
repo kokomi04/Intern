@@ -5,6 +5,8 @@ using Intern.Entities;
 using Intern.ViewModels.Authen;
 using Intern.ViewModels.ChangeAccount;
 using Intern.ViewModels;
+using Azure.Core;
+using Intern.ViewModels.Order;
 
 namespace Intern.Controllers
 {
@@ -146,6 +148,22 @@ namespace Intern.Controllers
             if (accCus == null)
                 return NotFound();
             return Ok(accCus);
+        }
+        [HttpPost("addnewaccountshipcontact")]
+        public async Task<IActionResult> AddNewAccountShipContact(AddAccShipContactRequest request)
+        {
+            var result = await _services.AddNewAccountShipContact(request);
+            if (result == null)
+                return BadRequest();
+            return Ok(result);
+        }
+        [HttpGet("getcalculbag")]
+        public async Task<IActionResult> GetCalculbag()
+        {
+            var result = await _services.GetCalculbag();
+            if (result == null)
+                return NotFound();
+            return Ok(result);
         }
     }
 }

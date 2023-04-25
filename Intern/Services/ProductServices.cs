@@ -4,6 +4,7 @@ using Intern.Entities;
 using Intern.ViewModels;
 using Intern.ViewModels.Authen;
 using Intern.ViewModels.ChangeAccount;
+using Intern.ViewModels.Order;
 using Intern.ViewModels.PagingCommon;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace Intern.Services
         {
             var products = _context.Products.AsQueryable();
 
-            var data = await products.Skip((5 * (pageIndex - 1))).Take(5).Include(x=>x.ProductImgs).ToListAsync();
+            var data = await products.Skip((5 * (pageIndex - 1))).Take(5).Include(x => x.ProductImgs).ToListAsync();
 
             return data;
         }
@@ -34,9 +35,9 @@ namespace Intern.Services
         public async Task<List<Product>> SearchProduct(string search)
         {
             var products = _context.Products.AsQueryable();
-            if(!search.IsNullOrEmpty())
+            if (!search.IsNullOrEmpty())
             {
-                products = products.Where(x=>x.ProductName.Contains(search)).Include(x => x.ProductImgs);
+                products = products.Where(x => x.ProductName.Contains(search)).Include(x => x.ProductImgs);
             }
             return await products.ToListAsync();
         }
@@ -47,7 +48,7 @@ namespace Intern.Services
         }
         public async Task<ProductDetail> GetProductId(int productId)
         {
-            var product = await _context.Products.Include(x=>x.ProductImgs).FirstOrDefaultAsync(x => x.ProductId == productId);
+            var product = await _context.Products.Include(x => x.ProductImgs).FirstOrDefaultAsync(x => x.ProductId == productId);
             if (product == null) return null;
 
             var brand = await _context.Brands.FirstOrDefaultAsync(x => x.BrandId == product.BrandId);
@@ -63,7 +64,7 @@ namespace Intern.Services
                 producer = producer,
                 size = size,
                 color = color,
-                categoryType=category
+                categoryType = category
             };
 
             return productDetail;
@@ -73,8 +74,8 @@ namespace Intern.Services
         {
             using (var trans = await _context.Database.BeginTransactionAsync())
             {
-                var accountBagId=0;
-                if (await _context.AccountBags.FirstOrDefaultAsync()!=null)
+                var accountBagId = 0;
+                if (await _context.AccountBags.FirstOrDefaultAsync() != null)
                     accountBagId = await _context.AccountBags.MaxAsync(x => x.AccountBagId);
                 var accountBag = new AccountBag()
                 {
@@ -92,12 +93,12 @@ namespace Intern.Services
         public async Task<List<GetProductBagResponse>> GetProductBagByAccountId(int accountId)
         {
             var result = new List<GetProductBagResponse>();
-            var accountBag = await _context.AccountBags.Where(x=>x.AccountId== accountId).ToListAsync();
+            var accountBag = await _context.AccountBags.Where(x => x.AccountId == accountId).ToListAsync();
             if (accountBag.Count == 0)
                 return null;
             foreach (var item in accountBag)
             {
-                var product = await _context.Products.Include(x => x.ProductImgs).FirstOrDefaultAsync(x=>x.ProductId==item.ProductId);
+                var product = await _context.Products.Include(x => x.ProductImgs).FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
                 var categoryType = await _context.CategoryTypes.FindAsync(product.CategoryTypeId);
                 var productBag = new GetProductBagResponse()
                 {
@@ -237,11 +238,35 @@ namespace Intern.Services
 
             acc.AccountName = request.name;
             acc.AccountBorn = request.born;
-            acc.AccountDetailAddress= request.address;
-            
-            _context.Accounts.Update(acc); 
+            acc.AccountDetailAddress = request.address;
+
+            _context.Accounts.Update(acc);
             await _context.SaveChangesAsync();
             return request;
+        }
+
+        public async Task<AddAccShipContactRequest> AddNewAccountShipContact(AddAccShipContactRequest request)
+        {
+            int accShipContactMax = 0;
+            if (await _context.AccountShipContacts.CountAsync() > 0)
+                accShipContactMax = await _context.AccountShipContacts.MaxAsync(x => x.AccountShipContactId);
+            var accShipContact = new AccountShipContact()
+            {
+                AccountShipContactId = accShipContactMax + 1,
+                AccountId = request.accountId,
+                AccountDetailAddress = request.accountDetailAddress,
+                AccountPhoneNumber = request.accountPhoneNumber,
+                ReceiverName = request.receiverName,
+                AccountShipContactStatusId = 1
+            };
+            await _context.AccountShipContacts.AddAsync(accShipContact);
+            await _context.SaveChangesAsync();
+            return request;
+        }
+
+        public Task<AccountCustom> GetCalculbag()
+        {
+            throw new NotImplementedException();
         }
     }
 }
