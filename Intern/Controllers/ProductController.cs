@@ -157,10 +157,26 @@ namespace Intern.Controllers
                 return BadRequest();
             return Ok(result);
         }
+        [HttpPut("deleteshipcontact")]
+        public async Task<IActionResult> DeleteShipContact(int idAccountShipContact)
+        {
+            var result = await _services.DeleteShipContact(idAccountShipContact);
+            if (result == 0)
+                return BadRequest();
+            return Ok(result);
+        }
         [HttpPost("getcalculbag")]
         public async Task<IActionResult> GetCalculbag(int[] request)
         {
             var result = await _services.GetCalculbag(request);
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
+        [HttpPost("createbill")]
+        public async Task<IActionResult> CreateBill(CreateBillRequest request)
+        {
+            var result = await _services.CreateBill(request);
             if (result == null)
                 return NotFound();
             return Ok(result);

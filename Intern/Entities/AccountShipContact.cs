@@ -18,6 +18,9 @@ namespace Intern.Entities
         public string ReceiverName { get; set; }
         public string AccountDetailAddress { get; set; }
         public string AccountPhoneNumber { get; set; }
+        public string DistrictId { get; set; }
+        public string ProvinceId { get; set; }
+        public string WardCode { get; set; }
 
         public Account Account { get; set; }
         public AccountShipContactStatus AccountShipContactStatus { get; set; }

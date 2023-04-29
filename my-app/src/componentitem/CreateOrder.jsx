@@ -76,8 +76,8 @@ function CreateOrder() {
             total = calculResult.orderItems.reduce((total, next) => {
                 return total + next.product.shellPrice * next.quantity
             }, 0)
-            localStorage.setItem('shipPrice', calculResult.shipMethods[1].price)
-            setPriceAfterShip(total + calculResult.shipMethods[1].price)
+            localStorage.setItem('shipPrice', calculResult.shipMethods[1].shipPrice)
+            setPriceAfterShip(total + calculResult.shipMethods[1].shipPrice)
             setShipPriceFix(199000)
         }
     }
@@ -221,7 +221,7 @@ function ShipContact({ setShipContact, id, setCalculResult }) {
         </>
     )
 }
-function ShipMethod({ showShipName, priceAfterShip, setShowShip, calculResult }) {
+function ShipMethod({ showShipName, priceAfterShip, setShowShip, calculResult}) {
     const noti = useRef(0)
     function setNotifi() {
         localStorage.setItem('noti', noti.current.value)

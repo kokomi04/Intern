@@ -258,11 +258,22 @@ namespace Intern.Services
                 AccountDetailAddress = request.accountDetailAddress,
                 AccountPhoneNumber = request.accountPhoneNumber,
                 ReceiverName = request.receiverName,
-                AccountShipContactStatusId = 1
+                AccountShipContactStatusId = 1,
+                DistrictId = request.districtID,
+                ProvinceId = request.provinceId,
+                WardCode= request.wardCode,
             };
             await _context.AccountShipContacts.AddAsync(accShipContact);
             await _context.SaveChangesAsync();
             return request;
+        }
+        public async Task<int> DeleteShipContact(int idAccountShipContact)
+        {
+            var accountShipContact = await _context.AccountShipContacts.FindAsync(idAccountShipContact);
+            if(accountShipContact==null)
+                return 0;
+            _context.AccountShipContacts.Remove(accountShipContact);
+            return await _context.SaveChangesAsync();
         }
 
         public async Task<CreateOrder> GetCalculbag(int[] request)
@@ -301,6 +312,11 @@ namespace Intern.Services
             };
 
             return createOrder;
+        }
+
+        public Task<int> CreateBill(CreateBillRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }
