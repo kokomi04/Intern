@@ -14,6 +14,7 @@ namespace Intern.EF
 
         public MyDbContext(DbContextOptions options) : base(options)
         {
+            
         }
 
         public DbSet<Product> Products { get; set; }

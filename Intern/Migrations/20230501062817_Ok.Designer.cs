@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intern.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230423081131_Init")]
-    partial class Init
+    [Migration("20230501062817_Ok")]
+    partial class Ok
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,7 +120,19 @@ namespace Intern.Migrations
                     b.Property<int>("AccountShipContactStatusId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DistrictId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProvinceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WardCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -178,7 +190,7 @@ namespace Intern.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AccountShipContactId")
+                    b.Property<int?>("AccountShipContactId")
                         .HasColumnType("int");
 
                     b.Property<string>("BillCode")
@@ -192,7 +204,6 @@ namespace Intern.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("BuyerNotification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CloseDate")
@@ -200,6 +211,9 @@ namespace Intern.Migrations
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("IdEmployee")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ProductReturnDate")
                         .HasColumnType("datetime2");
@@ -210,20 +224,24 @@ namespace Intern.Migrations
                     b.Property<int>("ShipMethodId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShipPrice")
+                    b.Property<int?>("ShipPrice")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ShipToBuyerDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("TotalBill")
+                        .HasColumnType("float");
+
                     b.HasKey("BillId");
 
-                    b.HasIndex("AccountShipContactId")
-                        .IsUnique();
+                    b.HasIndex("AccountShipContactId");
 
                     b.HasIndex("BillStatusId");
 
                     b.HasIndex("BuyMethodId");
+
+                    b.HasIndex("IdEmployee");
 
                     b.HasIndex("ShipMethodId");
 
@@ -264,7 +282,7 @@ namespace Intern.Migrations
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SalesId")
+                    b.Property<int?>("SalesId")
                         .HasColumnType("int");
 
                     b.HasKey("BillSalesId");
@@ -532,31 +550,31 @@ namespace Intern.Migrations
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SaleInt")
+                    b.Property<int>("SaleTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("SalesCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SalesInt")
+                        .HasColumnType("int");
+
                     b.Property<string>("SalesName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SalesPersen")
+                    b.Property<int?>("SalesPercent")
                         .HasColumnType("int");
 
                     b.Property<int>("SalesStatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SalesTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("SalesId");
 
-                    b.HasIndex("SalesStatusId");
+                    b.HasIndex("SaleTypeId");
 
-                    b.HasIndex("SalesTypeId");
+                    b.HasIndex("SalesStatusId");
 
                     b.ToTable("Sales");
                 });
@@ -583,20 +601,20 @@ namespace Intern.Migrations
 
             modelBuilder.Entity("Intern.Entities.SalesType", b =>
                 {
-                    b.Property<int>("SalesTypeId")
+                    b.Property<int>("SaleTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("SalesTypeCode")
+                    b.Property<string>("SaleTypeCode")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("SalesTypeDetail")
+                    b.Property<string>("SaleTypeDetail")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("SalesTypeId");
+                    b.HasKey("SaleTypeId");
 
                     b.ToTable("SalesTypes");
                 });
@@ -727,10 +745,8 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Bill", b =>
                 {
                     b.HasOne("Intern.Entities.AccountShipContact", "AccountShipContact")
-                        .WithOne("Bill")
-                        .HasForeignKey("Intern.Entities.Bill", "AccountShipContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Bills")
+                        .HasForeignKey("AccountShipContactId");
 
                     b.HasOne("Intern.Entities.BillStatus", "BillStatus")
                         .WithMany("Bills")
@@ -744,6 +760,10 @@ namespace Intern.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Intern.Entities.Account", "Employee")
+                        .WithMany("Bills")
+                        .HasForeignKey("IdEmployee");
+
                     b.HasOne("Intern.Entities.ShipMethod", "ShipMethod")
                         .WithMany("Bills")
                         .HasForeignKey("ShipMethodId")
@@ -755,6 +775,8 @@ namespace Intern.Migrations
                     b.Navigation("BillStatus");
 
                     b.Navigation("BuyMethod");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("ShipMethod");
                 });
@@ -788,9 +810,7 @@ namespace Intern.Migrations
 
                     b.HasOne("Intern.Entities.Sales", "Sales")
                         .WithMany("BillSales")
-                        .HasForeignKey("SalesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesId");
 
                     b.Navigation("Bill");
 
@@ -861,15 +881,15 @@ namespace Intern.Migrations
 
             modelBuilder.Entity("Intern.Entities.Sales", b =>
                 {
-                    b.HasOne("Intern.Entities.SalesStatus", "SalesStatus")
+                    b.HasOne("Intern.Entities.SalesType", "SalesType")
                         .WithMany("Sales")
-                        .HasForeignKey("SalesStatusId")
+                        .HasForeignKey("SaleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Intern.Entities.SalesType", "SalesType")
+                    b.HasOne("Intern.Entities.SalesStatus", "SalesStatus")
                         .WithMany("Sales")
-                        .HasForeignKey("SalesTypeId")
+                        .HasForeignKey("SalesStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -903,13 +923,14 @@ namespace Intern.Migrations
 
                     b.Navigation("AccountShipContacts");
 
+                    b.Navigation("Bills");
+
                     b.Navigation("VoteStars");
                 });
 
             modelBuilder.Entity("Intern.Entities.AccountShipContact", b =>
                 {
-                    b.Navigation("Bill")
-                        .IsRequired();
+                    b.Navigation("Bills");
                 });
 
             modelBuilder.Entity("Intern.Entities.AccountShipContactStatus", b =>

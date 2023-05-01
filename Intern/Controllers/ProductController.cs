@@ -177,8 +177,24 @@ namespace Intern.Controllers
         public async Task<IActionResult> CreateBill(CreateBillRequest request)
         {
             var result = await _services.CreateBill(request);
+            if (result == false)
+                return BadRequest();
+            return Ok(result);
+        }
+        [HttpGet("getbilldetailbyaccountid")]
+        public async Task<IActionResult> GetBillDetailByAccountId(int accountId)
+        {
+            var result = await _services.GetBillDetailByAccountId(accountId);
             if (result == null)
                 return NotFound();
+            return Ok(result);
+        }
+        [HttpPut("cancelBill")]
+        public async Task<IActionResult> CancelBill(int billId, int type)
+        {
+            var result = await _services.CancelBill(billId, type);
+            if (result == false)
+                return BadRequest();
             return Ok(result);
         }
     }

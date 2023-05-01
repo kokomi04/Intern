@@ -26,6 +26,7 @@ namespace Intern.Entities
         public string? BuyerNotification { get; set; }
         public int? ShipPrice { get; set; }
         public string BillCode { get; set; }
+        public double TotalBill { get; set; }
 
         public List<BillDetail> BillDetail { get; set; }
         public List<BillSales> BillSales { get; set; }

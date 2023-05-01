@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Intern.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Ok : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -158,13 +158,13 @@ namespace Intern.Migrations
                 name: "SalesTypes",
                 columns: table => new
                 {
-                    SalesTypeId = table.Column<int>(type: "int", nullable: false),
-                    SalesTypeCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    SalesTypeDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    SaleTypeId = table.Column<int>(type: "int", nullable: false),
+                    SaleTypeCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    SaleTypeDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SalesTypes", x => x.SalesTypeId);
+                    table.PrimaryKey("PK_SalesTypes", x => x.SaleTypeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -234,11 +234,11 @@ namespace Intern.Migrations
                 {
                     SalesId = table.Column<int>(type: "int", nullable: false),
                     SalesStatusId = table.Column<int>(type: "int", nullable: false),
-                    SalesTypeId = table.Column<int>(type: "int", nullable: false),
+                    SaleTypeId = table.Column<int>(type: "int", nullable: false),
                     SalesCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SalesName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SalesPersen = table.Column<int>(type: "int", nullable: true),
-                    SaleInt = table.Column<int>(type: "int", nullable: false),
+                    SalesPercent = table.Column<int>(type: "int", nullable: true),
+                    SalesInt = table.Column<int>(type: "int", nullable: true),
                     OpenDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -252,10 +252,10 @@ namespace Intern.Migrations
                         principalColumn: "SalesStatusId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Sales_SalesTypes_SalesTypeId",
-                        column: x => x.SalesTypeId,
+                        name: "FK_Sales_SalesTypes_SaleTypeId",
+                        column: x => x.SaleTypeId,
                         principalTable: "SalesTypes",
-                        principalColumn: "SalesTypeId",
+                        principalColumn: "SaleTypeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -328,7 +328,10 @@ namespace Intern.Migrations
                     AccountShipContactStatusId = table.Column<int>(type: "int", nullable: false),
                     ReceiverName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountDetailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccountPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AccountPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DistrictId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProvinceId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WardCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -424,18 +427,20 @@ namespace Intern.Migrations
                 columns: table => new
                 {
                     BillId = table.Column<int>(type: "int", nullable: false),
-                    AccountShipContactId = table.Column<int>(type: "int", nullable: false),
+                    AccountShipContactId = table.Column<int>(type: "int", nullable: true),
                     BuyMethodId = table.Column<int>(type: "int", nullable: false),
                     BillStatusId = table.Column<int>(type: "int", nullable: false),
                     ShipMethodId = table.Column<int>(type: "int", nullable: false),
+                    IdEmployee = table.Column<int>(type: "int", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShipToBuyerDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CloseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ProductReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    BuyerNotification = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShipPrice = table.Column<int>(type: "int", nullable: false),
-                    BillCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BuyerNotification = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShipPrice = table.Column<int>(type: "int", nullable: true),
+                    BillCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalBill = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -444,8 +449,12 @@ namespace Intern.Migrations
                         name: "FK_Bills_AccountShipContacts_AccountShipContactId",
                         column: x => x.AccountShipContactId,
                         principalTable: "AccountShipContacts",
-                        principalColumn: "AccountShipContactId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AccountShipContactId");
+                    table.ForeignKey(
+                        name: "FK_Bills_Accounts_IdEmployee",
+                        column: x => x.IdEmployee,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId");
                     table.ForeignKey(
                         name: "FK_Bills_BillStatus_BillStatusId",
                         column: x => x.BillStatusId,
@@ -499,7 +508,7 @@ namespace Intern.Migrations
                 {
                     BillSalesId = table.Column<int>(type: "int", nullable: false),
                     BillId = table.Column<int>(type: "int", nullable: false),
-                    SalesId = table.Column<int>(type: "int", nullable: false)
+                    SalesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -514,8 +523,7 @@ namespace Intern.Migrations
                         name: "FK_BillSales_Sales_SalesId",
                         column: x => x.SalesId,
                         principalTable: "Sales",
-                        principalColumn: "SalesId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SalesId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -561,8 +569,7 @@ namespace Intern.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_AccountShipContactId",
                 table: "Bills",
-                column: "AccountShipContactId",
-                unique: true);
+                column: "AccountShipContactId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_BillStatusId",
@@ -573,6 +580,11 @@ namespace Intern.Migrations
                 name: "IX_Bills_BuyMethodId",
                 table: "Bills",
                 column: "BuyMethodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bills_IdEmployee",
+                table: "Bills",
+                column: "IdEmployee");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_ShipMethodId",
@@ -630,9 +642,9 @@ namespace Intern.Migrations
                 column: "SalesStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sales_SalesTypeId",
+                name: "IX_Sales_SaleTypeId",
                 table: "Sales",
-                column: "SalesTypeId");
+                column: "SaleTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VoteStars_AccountId",

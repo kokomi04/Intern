@@ -28,7 +28,9 @@ namespace Intern.Services
         Task<AddAccShipContactRequest> AddNewAccountShipContact(AddAccShipContactRequest request);
         Task<int> DeleteShipContact(int idAccountShipContact);
         Task<CreateOrder> GetCalculbag(int[] request);
-        Task<int> CreateBill(CreateBillRequest request);
+        Task<bool> CreateBill(CreateBillRequest request);
+        Task<List<GetOrderResponse>> GetBillDetailByAccountId(int accountId);
+        Task<bool> CancelBill(int billId, int type);
 
     }
 }

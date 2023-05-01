@@ -21,6 +21,7 @@ namespace Intern.Services
         public ProductServices(MyDbContext context)
         {
             _context = context;
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
 
@@ -259,9 +260,9 @@ namespace Intern.Services
                 AccountPhoneNumber = request.accountPhoneNumber,
                 ReceiverName = request.receiverName,
                 AccountShipContactStatusId = 1,
-                DistrictId = request.districtID,
-                ProvinceId = request.provinceId,
-                WardCode= request.wardCode,
+                DistrictID = request.districtID,
+                ProvinceID = request.provinceId,
+                WardCode = request.wardCode,
             };
             await _context.AccountShipContacts.AddAsync(accShipContact);
             await _context.SaveChangesAsync();
@@ -270,7 +271,7 @@ namespace Intern.Services
         public async Task<int> DeleteShipContact(int idAccountShipContact)
         {
             var accountShipContact = await _context.AccountShipContacts.FindAsync(idAccountShipContact);
-            if(accountShipContact==null)
+            if (accountShipContact == null)
                 return 0;
             _context.AccountShipContacts.Remove(accountShipContact);
             return await _context.SaveChangesAsync();
@@ -305,18 +306,183 @@ namespace Intern.Services
             var createOrder = new CreateOrder()
             {
                 salesOfBill = sales,
-                accountShipContacts= accountShipContacts,
-                buyMethods= buyMethods,
-                orderItems= orderItems,
-                shipMethods= shipMethods,
+                accountShipContacts = accountShipContacts,
+                buyMethods = buyMethods,
+                orderItems = orderItems,
+                shipMethods = shipMethods,
             };
 
             return createOrder;
         }
 
-        public Task<int> CreateBill(CreateBillRequest request)
+        public async Task<bool> CreateBill(CreateBillRequest request)
         {
-            throw new NotImplementedException();
+            using (var trans = await _context.Database.BeginTransactionAsync())
+            {
+                int maxBillId = 0;
+                if (await _context.Bills.CountAsync() > 0)
+                    maxBillId = await _context.Bills.MaxAsync(x => x.BillId);
+                var bill = new Bill()
+                {
+                    BillId = maxBillId + 1,
+                    BillCode = "HD" + maxBillId + 1,
+                    ShipMethodId = request.ShipOptId,
+                    ShipPrice = request.ShipPrice,
+                    BuyMethodId = request.BuyOptId,
+                    BillStatusId = 1,
+                    BuyerNotification = request.BuyerNotification,
+                    CreateDate = DateTime.UtcNow,
+                    AccountShipContactId = request.AccountShipContactId,
+                    TotalBill = 0
+                };
+                await _context.Bills.AddAsync(bill);
+                await _context.SaveChangesAsync();
+
+                if (request.ShipVoucher.HasValue)
+                {
+                    int maxBillSalesId = 0;
+                    if (await _context.BillSales.CountAsync() > 0)
+                        maxBillSalesId = await _context.BillSales.MaxAsync(x => x.BillSalesId);
+                    var billSales = new BillSales()
+                    {
+                        BillSalesId = maxBillSalesId + 1,
+                        BillId = bill.BillId,
+                        SalesId = request.ShipVoucher,
+                    };
+                    await _context.BillSales.AddAsync(billSales);
+                    await _context.SaveChangesAsync();
+                }
+                if (request.VoucherVoucher.HasValue)
+                {
+                    int maxBillSalesId = 0;
+                    if (await _context.BillSales.CountAsync() > 0)
+                        maxBillSalesId = await _context.BillSales.MaxAsync(x => x.BillSalesId);
+                    var billSales = new BillSales()
+                    {
+                        BillSalesId = maxBillSalesId + 1,
+                        BillId = bill.BillId,
+                        SalesId = request.VoucherVoucher,
+                    };
+                    await _context.BillSales.AddAsync(billSales);
+                    await _context.SaveChangesAsync();
+                }
+
+                int count = 0;
+                double totalBill = 0;
+                foreach (var accountBagId in request.AccountBags)
+                {
+                    count++;
+                    var accountBag = await _context.AccountBags.FindAsync(accountBagId);
+                    if (accountBag == null) return false;
+                    var product = await _context.Products.FindAsync(accountBag.ProductId);
+                    if (product == null) return false;
+                    if (product.Quantity < accountBag.Quantity)
+                        return false;
+                    product.Quantity -= accountBag.Quantity;
+                    _context.Products.Update(product);
+                    await _context.SaveChangesAsync();
+
+                    totalBill += product.ShellPrice * accountBag.Quantity;
+
+                    int maxBillDetailId = 0;
+                    if (await _context.BillDetails.CountAsync() > 0)
+                        maxBillDetailId = await _context.BillDetails.MaxAsync(x => x.BillDetailId);
+                    var billDetail = new BillDetail()
+                    {
+                        BillDetailId = maxBillDetailId + count,
+                        BillId = bill.BillId,
+                        ProductId = accountBag.ProductId,
+                        Price = accountBag.Quantity * product.Price,
+                        Quantity = accountBag.Quantity,
+                    };
+                    await _context.BillDetails.AddAsync(billDetail);
+                    await _context.SaveChangesAsync();
+                }
+
+                bill.TotalBill = totalBill;
+                _context.Bills.Update(bill);
+                await _context.SaveChangesAsync();
+
+                await trans.CommitAsync();
+                return true;
+            }
+        }
+
+        public async Task<List<GetOrderResponse>> GetBillDetailByAccountId(int accountId)
+        {
+            var result = new List<GetOrderResponse>();
+            var accShipContacts = await _context.AccountShipContacts.Where(x => x.AccountId == accountId).ToListAsync();
+            if (accShipContacts.Count == 0) return null;
+            foreach (var accShipContact in accShipContacts)
+            {
+                var bills = await _context.Bills.Where(x => x.AccountShipContactId == accShipContact.AccountShipContactId).ToListAsync();
+                if (bills.Count > 0)
+                    foreach (var bill in bills)
+                    {
+                        var shipMethod = await _context.ShipMethods.FirstOrDefaultAsync(x => x.ShipMethodId == bill.ShipMethodId);
+                        var buyMethod = await _context.BuyMethods.FirstOrDefaultAsync(x => x.BuyMethodId == bill.BuyMethodId);
+                        var billStatus = await _context.BillStatuses.FirstOrDefaultAsync(x => x.BillStatusId == bill.BillStatusId);
+
+                        var productBillDetails = new List<BillDetailAndProduct>();
+                        var billDetails = await _context.BillDetails.Where(x => x.BillId == bill.BillId).ToListAsync();
+                        foreach (var item in billDetails)
+                        {
+                            var product = await _context.Products.FindAsync(item.ProductId);
+                            product.ProductImgs = await _context.ProductImgs.Where(x => x.ProductId == product.ProductId).ToListAsync();
+                            productBillDetails.Add(new BillDetailAndProduct()
+                            {
+                                BillDetail = item,
+                                Product = product,
+                            });
+                        }
+
+                        var billSales = await _context.BillSales.Where(x => x.BillId == bill.BillId).Include(x => x.Sales).ToListAsync();
+                        int? freeShip = 0, voucherSIXDO = 0;
+                        if (billSales.Count > 0)
+                            foreach (var item in billSales)
+                            {
+                                if (item.Sales.SaleTypeId == 1)
+                                    freeShip = item.Sales.SalesPercent + item.Sales.SalesInt;
+                                else if (item.Sales.SaleTypeId == 2)
+                                    voucherSIXDO = item.Sales.SalesPercent + item.Sales.SalesInt;
+                            }
+
+                        result.Add(new GetOrderResponse()
+                        {
+                            ShipMethod = shipMethod,
+                            AccountShipContact = accShipContact,
+                            Bill = bill,
+                            BillStatus = billStatus,
+                            BuyMethod = buyMethod,
+                            FreeShip = freeShip,
+                            VoucherSIXDO = voucherSIXDO,
+                            ProductBillDetails = productBillDetails,
+                        });
+                    }
+            }
+            return result;
+        }
+
+        public async Task<bool> CancelBill(int billId, int type)
+        {
+            var bill = await _context.Bills.Include(x => x.BillDetail).FirstOrDefaultAsync(x => x.BillId == billId);
+            if (bill == null || bill.BillDetail.Count() == 0) return false;
+
+            bill.BillStatusId = 4;
+            bill.CloseDate = DateTime.Now;
+            _context.Bills.Update(bill);
+            await _context.SaveChangesAsync();
+
+            foreach (var item in bill.BillDetail)
+            {
+                var product = await _context.Products.FindAsync(item.ProductId);
+                if (product != null)
+                    product.Quantity += item.Quantity;
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+            }
+
+            return true;
         }
     }
 }
