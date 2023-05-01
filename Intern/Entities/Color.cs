@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class Color
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ColorId { get; set; } 
 
         [MaxLength(20)]

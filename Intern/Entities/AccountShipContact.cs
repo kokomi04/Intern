@@ -11,16 +11,19 @@ namespace Intern.Entities
     public class AccountShipContact
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int AccountShipContactId { get; set; } 
         public int AccountId { get; set; }
         public int AccountShipContactStatusId { get; set; }
         public string ReceiverName { get; set; }
         public string AccountDetailAddress { get; set; }
         public string AccountPhoneNumber { get; set; }
+        public string DistrictID { get; set; }
+        public string ProvinceID { get; set; }
+        public string WardCode { get; set; }
 
         public Account Account { get; set; }
         public AccountShipContactStatus AccountShipContactStatus { get; set; }
-        public Bill Bill { get; set; }
+        public List<Bill> Bills { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class Producer
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProducerId { get; set; } 
 
         [MaxLength(20)]

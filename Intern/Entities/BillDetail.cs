@@ -10,8 +10,8 @@ namespace Intern.Entities
     [Table("BillDetails")]
     public class BillDetail
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]   
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BillDetailId { get; set; } 
         public int BillId { get; set; }
         public int ProductId { get; set; }

@@ -11,13 +11,13 @@ namespace Intern.Entities
     public class SalesType
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int SalesTypeId { get; set; } 
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int SaleTypeId { get; set; } 
 
         [MaxLength(20)]
-        public string SalesTypeCode { get; set; }
+        public string SaleTypeCode { get; set; }
         [MaxLength(100)]
-        public string SalesTypeDetail { get; set; }
+        public string SaleTypeDetail { get; set; }
 
         public List<Sales> Sales { get; set; }
     }

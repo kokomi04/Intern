@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class Role
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int RoleId { get; set; } 
 
         [MaxLength(20)]

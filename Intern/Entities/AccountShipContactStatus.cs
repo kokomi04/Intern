@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class AccountShipContactStatus
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int AccountShipContactStatusId { get; set; } 
         [MaxLength(20)]
         public string AccountShipContactStatusCode { get; set; }

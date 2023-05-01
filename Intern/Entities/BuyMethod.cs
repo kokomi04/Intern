@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class BuyMethod
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BuyMethodId { get; set; } 
 
         [MaxLength(20)]

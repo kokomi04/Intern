@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class Brand
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BrandId { get; set; } 
 
         [MaxLength(20)]

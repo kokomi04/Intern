@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intern.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20230413082918_Init")]
-    partial class Init
+    [Migration("20230501122532_FixShipMethod")]
+    partial class FixShipMethod
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,10 +28,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Account", b =>
                 {
                     b.Property<int>("AccountId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountId"));
 
                     b.Property<DateTime?>("AccountBorn")
                         .HasColumnType("datetime2");
@@ -65,6 +62,10 @@ namespace Intern.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Sdt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
@@ -80,10 +81,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.AccountBag", b =>
                 {
                     b.Property<int>("AccountBagId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountBagId"));
 
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
@@ -106,10 +104,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.AccountShipContact", b =>
                 {
                     b.Property<int>("AccountShipContactId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountShipContactId"));
 
                     b.Property<string>("AccountDetailAddress")
                         .IsRequired()
@@ -125,7 +120,19 @@ namespace Intern.Migrations
                     b.Property<int>("AccountShipContactStatusId")
                         .HasColumnType("int");
 
+                    b.Property<string>("DistrictId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProvinceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ReceiverName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WardCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -141,10 +148,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.AccountShipContactStatus", b =>
                 {
                     b.Property<int>("AccountShipContactStatusId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountShipContactStatusId"));
 
                     b.Property<string>("AccountShipContactStatusCode")
                         .IsRequired()
@@ -164,10 +168,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.AccountStatus", b =>
                 {
                     b.Property<int>("AccountStatusId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountStatusId"));
 
                     b.Property<string>("AccountStatusCode")
                         .IsRequired()
@@ -187,12 +188,9 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Bill", b =>
                 {
                     b.Property<int>("BillId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillId"));
-
-                    b.Property<int>("AccountShipContactId")
+                    b.Property<int?>("AccountShipContactId")
                         .HasColumnType("int");
 
                     b.Property<string>("BillCode")
@@ -206,7 +204,6 @@ namespace Intern.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("BuyerNotification")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CloseDate")
@@ -214,6 +211,9 @@ namespace Intern.Migrations
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("IdEmployee")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ProductReturnDate")
                         .HasColumnType("datetime2");
@@ -224,20 +224,24 @@ namespace Intern.Migrations
                     b.Property<int>("ShipMethodId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShipPrice")
+                    b.Property<int?>("ShipPrice")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ShipToBuyerDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("TotalBill")
+                        .HasColumnType("float");
+
                     b.HasKey("BillId");
 
-                    b.HasIndex("AccountShipContactId")
-                        .IsUnique();
+                    b.HasIndex("AccountShipContactId");
 
                     b.HasIndex("BillStatusId");
 
                     b.HasIndex("BuyMethodId");
+
+                    b.HasIndex("IdEmployee");
 
                     b.HasIndex("ShipMethodId");
 
@@ -247,10 +251,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.BillDetail", b =>
                 {
                     b.Property<int>("BillDetailId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillDetailId"));
 
                     b.Property<int>("BillId")
                         .HasColumnType("int");
@@ -276,15 +277,12 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.BillSales", b =>
                 {
                     b.Property<int>("BillSalesId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillSalesId"));
 
                     b.Property<int>("BillId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SalesId")
+                    b.Property<int?>("SalesId")
                         .HasColumnType("int");
 
                     b.HasKey("BillSalesId");
@@ -299,10 +297,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.BillStatus", b =>
                 {
                     b.Property<int>("BillStatusId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillStatusId"));
 
                     b.Property<string>("BillStatusCode")
                         .IsRequired()
@@ -322,10 +317,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Brand", b =>
                 {
                     b.Property<int>("BrandId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
 
                     b.Property<string>("BrandCode")
                         .IsRequired()
@@ -345,10 +337,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.BuyMethod", b =>
                 {
                     b.Property<int>("BuyMethodId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BuyMethodId"));
 
                     b.Property<string>("BuyMethodCode")
                         .IsRequired()
@@ -368,10 +357,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.CategoryType", b =>
                 {
                     b.Property<int>("CategoryTypeId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryTypeId"));
 
                     b.Property<string>("CategoryTypeCode")
                         .IsRequired()
@@ -391,10 +377,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Color", b =>
                 {
                     b.Property<int>("ColorId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorId"));
 
                     b.Property<string>("ColorCode")
                         .IsRequired()
@@ -414,10 +397,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Producer", b =>
                 {
                     b.Property<int>("ProducerId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProducerId"));
 
                     b.Property<string>("ProducerCode")
                         .IsRequired()
@@ -437,10 +417,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Product", b =>
                 {
                     b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
@@ -500,7 +477,7 @@ namespace Intern.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Intern.Entities.ProductImg", b =>
+            modelBuilder.Entity("Intern.Entities.ProductImgs", b =>
                 {
                     b.Property<int>("ProductImgId")
                         .ValueGeneratedOnAdd()
@@ -508,13 +485,10 @@ namespace Intern.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductImgId"));
 
-                    b.Property<int>("CountImg")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<byte[]>("ProductImage")
+                    b.Property<byte[]>("ProductImg")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
@@ -528,10 +502,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.ProductStatus", b =>
                 {
                     b.Property<int>("ProductStatusId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductStatusId"));
 
                     b.Property<string>("ProductStatusCode")
                         .IsRequired()
@@ -551,10 +522,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Role", b =>
                 {
                     b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"));
 
                     b.Property<string>("RoleCode")
                         .IsRequired()
@@ -574,10 +542,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Sales", b =>
                 {
                     b.Property<int>("SalesId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalesId"));
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
@@ -585,31 +550,31 @@ namespace Intern.Migrations
                     b.Property<DateTime>("OpenDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SaleInt")
+                    b.Property<int>("SaleTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("SalesCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SalesInt")
+                        .HasColumnType("int");
+
                     b.Property<string>("SalesName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SalesPersen")
+                    b.Property<int?>("SalesPercent")
                         .HasColumnType("int");
 
                     b.Property<int>("SalesStatusId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SalesTypeId")
-                        .HasColumnType("int");
-
                     b.HasKey("SalesId");
 
-                    b.HasIndex("SalesStatusId");
+                    b.HasIndex("SaleTypeId");
 
-                    b.HasIndex("SalesTypeId");
+                    b.HasIndex("SalesStatusId");
 
                     b.ToTable("Sales");
                 });
@@ -617,10 +582,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.SalesStatus", b =>
                 {
                     b.Property<int>("SalesStatusId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalesStatusId"));
 
                     b.Property<string>("SalesStatusCode")
                         .IsRequired()
@@ -639,23 +601,20 @@ namespace Intern.Migrations
 
             modelBuilder.Entity("Intern.Entities.SalesType", b =>
                 {
-                    b.Property<int>("SalesTypeId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("SaleTypeId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalesTypeId"));
-
-                    b.Property<string>("SalesTypeCode")
+                    b.Property<string>("SaleTypeCode")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("SalesTypeDetail")
+                    b.Property<string>("SaleTypeDetail")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("SalesTypeId");
+                    b.HasKey("SaleTypeId");
 
                     b.ToTable("SalesTypes");
                 });
@@ -663,10 +622,10 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.ShipMethod", b =>
                 {
                     b.Property<int>("ShipMethodId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShipMethodId"));
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
 
                     b.Property<string>("ShipMethodCode")
                         .IsRequired()
@@ -678,9 +637,6 @@ namespace Intern.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("ShipPrice")
-                        .HasColumnType("int");
-
                     b.HasKey("ShipMethodId");
 
                     b.ToTable("ShipMethods");
@@ -689,10 +645,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Size", b =>
                 {
                     b.Property<int>("SizeId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeId"));
 
                     b.Property<string>("SizeCode")
                         .IsRequired()
@@ -712,10 +665,7 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.VoteStar", b =>
                 {
                     b.Property<int>("VoteStarId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoteStarId"));
 
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
@@ -795,10 +745,8 @@ namespace Intern.Migrations
             modelBuilder.Entity("Intern.Entities.Bill", b =>
                 {
                     b.HasOne("Intern.Entities.AccountShipContact", "AccountShipContact")
-                        .WithOne("Bill")
-                        .HasForeignKey("Intern.Entities.Bill", "AccountShipContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Bills")
+                        .HasForeignKey("AccountShipContactId");
 
                     b.HasOne("Intern.Entities.BillStatus", "BillStatus")
                         .WithMany("Bills")
@@ -812,6 +760,10 @@ namespace Intern.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Intern.Entities.Account", "Employee")
+                        .WithMany("Bills")
+                        .HasForeignKey("IdEmployee");
+
                     b.HasOne("Intern.Entities.ShipMethod", "ShipMethod")
                         .WithMany("Bills")
                         .HasForeignKey("ShipMethodId")
@@ -823,6 +775,8 @@ namespace Intern.Migrations
                     b.Navigation("BillStatus");
 
                     b.Navigation("BuyMethod");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("ShipMethod");
                 });
@@ -856,9 +810,7 @@ namespace Intern.Migrations
 
                     b.HasOne("Intern.Entities.Sales", "Sales")
                         .WithMany("BillSales")
-                        .HasForeignKey("SalesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SalesId");
 
                     b.Navigation("Bill");
 
@@ -916,7 +868,7 @@ namespace Intern.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("Intern.Entities.ProductImg", b =>
+            modelBuilder.Entity("Intern.Entities.ProductImgs", b =>
                 {
                     b.HasOne("Intern.Entities.Product", "Product")
                         .WithMany("ProductImgs")
@@ -929,15 +881,15 @@ namespace Intern.Migrations
 
             modelBuilder.Entity("Intern.Entities.Sales", b =>
                 {
-                    b.HasOne("Intern.Entities.SalesStatus", "SalesStatus")
+                    b.HasOne("Intern.Entities.SalesType", "SalesType")
                         .WithMany("Sales")
-                        .HasForeignKey("SalesStatusId")
+                        .HasForeignKey("SaleTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Intern.Entities.SalesType", "SalesType")
+                    b.HasOne("Intern.Entities.SalesStatus", "SalesStatus")
                         .WithMany("Sales")
-                        .HasForeignKey("SalesTypeId")
+                        .HasForeignKey("SalesStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -971,13 +923,14 @@ namespace Intern.Migrations
 
                     b.Navigation("AccountShipContacts");
 
+                    b.Navigation("Bills");
+
                     b.Navigation("VoteStars");
                 });
 
             modelBuilder.Entity("Intern.Entities.AccountShipContact", b =>
                 {
-                    b.Navigation("Bill")
-                        .IsRequired();
+                    b.Navigation("Bills");
                 });
 
             modelBuilder.Entity("Intern.Entities.AccountShipContactStatus", b =>

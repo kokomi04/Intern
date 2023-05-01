@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Intern.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Ok : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,7 @@ namespace Intern.Migrations
                 name: "AccountShipContactStatus",
                 columns: table => new
                 {
-                    AccountShipContactStatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountShipContactStatusId = table.Column<int>(type: "int", nullable: false),
                     AccountShipContactStatusCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     AccountShipContactStatusDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -29,8 +28,7 @@ namespace Intern.Migrations
                 name: "AccountStatus",
                 columns: table => new
                 {
-                    AccountStatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountStatusId = table.Column<int>(type: "int", nullable: false),
                     AccountStatusCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     AccountStatusDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -43,8 +41,7 @@ namespace Intern.Migrations
                 name: "BillStatus",
                 columns: table => new
                 {
-                    BillStatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BillStatusId = table.Column<int>(type: "int", nullable: false),
                     BillStatusCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     BillStatusDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -57,8 +54,7 @@ namespace Intern.Migrations
                 name: "Brands",
                 columns: table => new
                 {
-                    BrandId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BrandId = table.Column<int>(type: "int", nullable: false),
                     BrandCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     BrandDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -71,8 +67,7 @@ namespace Intern.Migrations
                 name: "BuyMethods",
                 columns: table => new
                 {
-                    BuyMethodId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BuyMethodId = table.Column<int>(type: "int", nullable: false),
                     BuyMethodCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     BuyMethodName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -85,8 +80,7 @@ namespace Intern.Migrations
                 name: "CategoryTypes",
                 columns: table => new
                 {
-                    CategoryTypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryTypeId = table.Column<int>(type: "int", nullable: false),
                     CategoryTypeCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CategoryTypeDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -99,8 +93,7 @@ namespace Intern.Migrations
                 name: "Colors",
                 columns: table => new
                 {
-                    ColorId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ColorId = table.Column<int>(type: "int", nullable: false),
                     ColorCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ColorDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -113,8 +106,7 @@ namespace Intern.Migrations
                 name: "Producers",
                 columns: table => new
                 {
-                    ProducerId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProducerId = table.Column<int>(type: "int", nullable: false),
                     ProducerCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ProducerDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -127,8 +119,7 @@ namespace Intern.Migrations
                 name: "ProductStatus",
                 columns: table => new
                 {
-                    ProductStatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductStatusId = table.Column<int>(type: "int", nullable: false),
                     ProductStatusCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ProductStatusDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -141,8 +132,7 @@ namespace Intern.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     RoleCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     RoleDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -155,8 +145,7 @@ namespace Intern.Migrations
                 name: "SalesStatus",
                 columns: table => new
                 {
-                    SalesStatusId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SalesStatusId = table.Column<int>(type: "int", nullable: false),
                     SalesStatusCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     SalesStatusDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
@@ -169,22 +158,20 @@ namespace Intern.Migrations
                 name: "SalesTypes",
                 columns: table => new
                 {
-                    SalesTypeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SalesTypeCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    SalesTypeDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    SaleTypeId = table.Column<int>(type: "int", nullable: false),
+                    SaleTypeCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    SaleTypeDetail = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SalesTypes", x => x.SalesTypeId);
+                    table.PrimaryKey("PK_SalesTypes", x => x.SaleTypeId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ShipMethods",
                 columns: table => new
                 {
-                    ShipMethodId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ShipMethodId = table.Column<int>(type: "int", nullable: false),
                     ShipMethodCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ShipMethodName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ShipPrice = table.Column<int>(type: "int", nullable: false)
@@ -198,8 +185,7 @@ namespace Intern.Migrations
                 name: "Sizes",
                 columns: table => new
                 {
-                    SizeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SizeId = table.Column<int>(type: "int", nullable: false),
                     SizeCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     SizeDetail = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
@@ -212,13 +198,13 @@ namespace Intern.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    AccountId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountId = table.Column<int>(type: "int", nullable: false),
                     AccountUserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     AccountPassWord = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     AccountStatusId = table.Column<int>(type: "int", nullable: false),
                     RoleId = table.Column<int>(type: "int", nullable: false),
                     AccountName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sdt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountBorn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     AccountDetailAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AccountCreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -246,14 +232,13 @@ namespace Intern.Migrations
                 name: "Sales",
                 columns: table => new
                 {
-                    SalesId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SalesId = table.Column<int>(type: "int", nullable: false),
                     SalesStatusId = table.Column<int>(type: "int", nullable: false),
-                    SalesTypeId = table.Column<int>(type: "int", nullable: false),
+                    SaleTypeId = table.Column<int>(type: "int", nullable: false),
                     SalesCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SalesName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SalesPersen = table.Column<int>(type: "int", nullable: true),
-                    SaleInt = table.Column<int>(type: "int", nullable: false),
+                    SalesPercent = table.Column<int>(type: "int", nullable: true),
+                    SalesInt = table.Column<int>(type: "int", nullable: true),
                     OpenDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
@@ -267,10 +252,10 @@ namespace Intern.Migrations
                         principalColumn: "SalesStatusId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Sales_SalesTypes_SalesTypeId",
-                        column: x => x.SalesTypeId,
+                        name: "FK_Sales_SalesTypes_SaleTypeId",
+                        column: x => x.SaleTypeId,
                         principalTable: "SalesTypes",
-                        principalColumn: "SalesTypeId",
+                        principalColumn: "SaleTypeId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -278,8 +263,7 @@ namespace Intern.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     CategoryTypeId = table.Column<int>(type: "int", nullable: false),
                     SizeId = table.Column<int>(type: "int", nullable: false),
                     ColorId = table.Column<int>(type: "int", nullable: false),
@@ -339,13 +323,15 @@ namespace Intern.Migrations
                 name: "AccountShipContacts",
                 columns: table => new
                 {
-                    AccountShipContactId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountShipContactId = table.Column<int>(type: "int", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false),
                     AccountShipContactStatusId = table.Column<int>(type: "int", nullable: false),
                     ReceiverName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccountDetailAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AccountPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    AccountPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DistrictId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProvinceId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WardCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -368,8 +354,7 @@ namespace Intern.Migrations
                 name: "AccountBags",
                 columns: table => new
                 {
-                    AccountBagId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AccountBagId = table.Column<int>(type: "int", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
@@ -398,8 +383,7 @@ namespace Intern.Migrations
                     ProductImgId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    CountImg = table.Column<int>(type: "int", nullable: false),
-                    ProductImage = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    ProductImg = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -416,8 +400,7 @@ namespace Intern.Migrations
                 name: "VoteStars",
                 columns: table => new
                 {
-                    VoteStarId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VoteStarId = table.Column<int>(type: "int", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     StarVoted = table.Column<int>(type: "int", nullable: false)
@@ -443,20 +426,21 @@ namespace Intern.Migrations
                 name: "Bills",
                 columns: table => new
                 {
-                    BillId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountShipContactId = table.Column<int>(type: "int", nullable: false),
+                    BillId = table.Column<int>(type: "int", nullable: false),
+                    AccountShipContactId = table.Column<int>(type: "int", nullable: true),
                     BuyMethodId = table.Column<int>(type: "int", nullable: false),
                     BillStatusId = table.Column<int>(type: "int", nullable: false),
                     ShipMethodId = table.Column<int>(type: "int", nullable: false),
+                    IdEmployee = table.Column<int>(type: "int", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShipToBuyerDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CloseDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ProductReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    BuyerNotification = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShipPrice = table.Column<int>(type: "int", nullable: false),
-                    BillCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BuyerNotification = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShipPrice = table.Column<int>(type: "int", nullable: true),
+                    BillCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalBill = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -465,8 +449,12 @@ namespace Intern.Migrations
                         name: "FK_Bills_AccountShipContacts_AccountShipContactId",
                         column: x => x.AccountShipContactId,
                         principalTable: "AccountShipContacts",
-                        principalColumn: "AccountShipContactId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AccountShipContactId");
+                    table.ForeignKey(
+                        name: "FK_Bills_Accounts_IdEmployee",
+                        column: x => x.IdEmployee,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountId");
                     table.ForeignKey(
                         name: "FK_Bills_BillStatus_BillStatusId",
                         column: x => x.BillStatusId,
@@ -491,8 +479,7 @@ namespace Intern.Migrations
                 name: "BillDetails",
                 columns: table => new
                 {
-                    BillDetailId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BillDetailId = table.Column<int>(type: "int", nullable: false),
                     BillId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -519,10 +506,9 @@ namespace Intern.Migrations
                 name: "BillSales",
                 columns: table => new
                 {
-                    BillSalesId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BillSalesId = table.Column<int>(type: "int", nullable: false),
                     BillId = table.Column<int>(type: "int", nullable: false),
-                    SalesId = table.Column<int>(type: "int", nullable: false)
+                    SalesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -537,8 +523,7 @@ namespace Intern.Migrations
                         name: "FK_BillSales_Sales_SalesId",
                         column: x => x.SalesId,
                         principalTable: "Sales",
-                        principalColumn: "SalesId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SalesId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -584,8 +569,7 @@ namespace Intern.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_AccountShipContactId",
                 table: "Bills",
-                column: "AccountShipContactId",
-                unique: true);
+                column: "AccountShipContactId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_BillStatusId",
@@ -596,6 +580,11 @@ namespace Intern.Migrations
                 name: "IX_Bills_BuyMethodId",
                 table: "Bills",
                 column: "BuyMethodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bills_IdEmployee",
+                table: "Bills",
+                column: "IdEmployee");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_ShipMethodId",
@@ -653,9 +642,9 @@ namespace Intern.Migrations
                 column: "SalesStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sales_SalesTypeId",
+                name: "IX_Sales_SaleTypeId",
                 table: "Sales",
-                column: "SalesTypeId");
+                column: "SaleTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VoteStars_AccountId",

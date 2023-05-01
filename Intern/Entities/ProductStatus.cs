@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class ProductStatus
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProductStatusId { get; set; } 
 
         [MaxLength(20)]

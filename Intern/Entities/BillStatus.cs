@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class BillStatus
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int BillStatusId { get; set; } 
 
         [MaxLength(20)]

@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class Size
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int SizeId { get; set; } 
 
         [MaxLength(10)]

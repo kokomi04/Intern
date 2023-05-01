@@ -11,7 +11,7 @@ namespace Intern.Entities
     public class VoteStar
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int VoteStarId { get; set; } 
         public int AccountId { get; set; }
         public int ProductId { get; set; }
