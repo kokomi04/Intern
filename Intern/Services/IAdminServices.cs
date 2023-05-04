@@ -9,7 +9,7 @@ namespace Intern.Services
     {
         Task<AnalysisData> GetAnalysisData();
         Task<AllProperty> GetAllProperty();
-        Task<List<Product>> SearchTop5Product(string search);
+        Task<List<Product>> SearchTop5Product(string? search);
         Task<Bill> CreateBillInShop(int idEmployee);
         Task<AllBillDetails> GetAllBillDetailOfBill(int idBill);
     }

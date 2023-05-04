@@ -4,6 +4,7 @@ using Intern.ViewModels;
 using Intern.ViewModels.Analysis;
 using Intern.ViewModels.Order;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 
 namespace Intern.Services
@@ -76,12 +77,12 @@ namespace Intern.Services
                     };
                     billDetailAndProducts.Add(billDetailAndProduct);
                 }
-
+            var sales = await _context.Sales.ToListAsync();
             var allBillDetails = new AllBillDetails()
             {
                 Bill = bill,
                 billDetailAndProducts = billDetailAndProducts,
-                Sales = null
+                Sales = sales,
             };
             return allBillDetails;
         }
@@ -104,25 +105,113 @@ namespace Intern.Services
             int voucherCountUsing = await _context.Sales.Where(x => x.SalesStatusId == 1).CountAsync();
             int productQuantityInventory = await _context.Products.Where(x => x.ProductStatusId == 1).SumAsync(x => x.Quantity);
             int custumerCountActive = await _context.Accounts.Where(x => x.AccountStatusId == 1 && x.RoleId == 3).CountAsync();
-            var query = from p in _context.Products
+            var query1 = from p in _context.Products
                         join bd in _context.BillDetails
                         on p.ProductId equals bd.ProductId
                         join b in _context.Bills
                         on bd.BillId equals b.BillId
-                        where b.BillStatusId == 3 && b.CreateDate.Month == DateTime.Now.Month
-                        orderby bd.Quantity descending
-                        group new TopProductSold()
+                        where b.BillStatusId == 1 && b.CreateDate.Month == DateTime.Now.Month
+                        group new { p, bd } by p.ProductId into t
+                        select new TopProductSold()
                         {
-                            name = p.ProductName,
-                            sold = bd.Quantity,
-                            inventory = p.Quantity - bd.Quantity,
-                            productCode = p.ProductDetail
-                        } by p.ProductId;
-            var top5ProductSolds = new List<TopProductSold>();
-            return null;
+                            name = t.FirstOrDefault().p.ProductName,
+                            sold = t.Sum(x => x.bd.Quantity),
+                            inventory = t.Sum(x => x.p.Quantity - x.bd.Quantity),
+                            productCode = t.FirstOrDefault().p.ProductDetail
+                        };
+            var top5ProductSolds = await query1.Take(5).OrderByDescending(x=>x.sold).ToListAsync();
+
+            var query2 = from a in _context.Accounts
+                        join asc in _context.AccountShipContacts
+                        on a.AccountId equals asc.AccountId
+                        join b in _context.Bills
+                        on asc.AccountShipContactId equals b.AccountShipContactId
+                        join bd in _context.BillDetails
+                        on b.BillId equals bd.BillId
+                        where b.BillStatusId == 1 && b.CreateDate.Month == DateTime.Now.Month
+                        group new { a, bd } by a.AccountId into t
+                        select new TopAccountPaid()
+                        {
+                            accountCode = t.FirstOrDefault().a.AccountUserName,
+                            sdt = t.FirstOrDefault().a.Sdt,
+                            name = t.FirstOrDefault().a.AccountName,
+                            totalPaid = t.Sum(x =>x.bd.Price)
+                        };
+            var top5AccountPaids = await query2.Take(5).OrderByDescending(x=>x.totalPaid).ToListAsync();
+
+            var totalBillMonth = new List<int>();
+            for (int i = 0; i < 12; i++)
+            {
+                var billMonth = await _context.Bills.CountAsync(x => x.CreateDate.Month == i + 1);
+                totalBillMonth.Add(billMonth);
+            }
+
+            var analysisProfit12Month = new List<MonthAnalysis>();
+            for (int i = 1; i <= 12; i++)
+            {
+                var bills = await _context.Bills.Where(x => x.CreateDate.Month == i && x.BillStatusId == 3).ToListAsync();
+                int soldTotal = 0;
+                int profitBefore = 0;
+                foreach (var bill in bills)
+                {
+                    var totalProductOdBill = await _context.BillDetails.DistinctBy(x => x.ProductId).CountAsync();
+                    soldTotal += totalProductOdBill;
+
+                    int totalPriceBill = 0; ;
+                    var billDetails = await _context.BillDetails.Where(x=>x.BillId==bill.BillId).Include(x=>x.Product).ToListAsync();
+                    foreach (var billDetail in billDetails)
+                    {
+                        totalPriceBill += billDetail.Price;
+                        profitBefore += billDetail.Product.Price * billDetail.Quantity - billDetail.Price;
+                    }
+                    var billSales = await _context.BillSales.Where(x=>x.BillId==bill.BillId).Include(x=>x.Sales).ToListAsync();
+
+                    foreach (var item in billSales)
+                    {
+                        if(item.Sales.SaleTypeId == 1)
+                        {
+                            var freeShip = item.Sales.SalesInt;
+                            profitBefore -= (int)freeShip;
+                        }
+                        else if(item.Sales.SaleTypeId == 2)
+                        {
+                            var voucher = item.Sales.SalesInt + item.Sales.SalesPercent;
+                            if (voucher > 100)
+                                profitBefore -= (int)voucher;
+                            else
+                                profitBefore -= (int)voucher * totalPriceBill / 100;
+                        }
+                    }
+                }
+
+                int? shipLossTotal = await _context.Bills.Where(x => x.CreateDate.Month == i && x.BillStatusId == 5).SumAsync(x => x.ShipPrice);
+                var monthAnalysis = new MonthAnalysis()
+                {
+                    shippedBillTotal = bills.Count,
+                    soldTotal = soldTotal,
+                    backBillTotal = await _context.Bills.Where(x => x.CreateDate.Month == i && x.BillStatusId == 5).CountAsync(),
+                    profitBefore = profitBefore,
+                    shipLossTotal = shipLossTotal,
+                    resultProfit = profitBefore - shipLossTotal,
+                };
+                analysisProfit12Month.Add(monthAnalysis);
+            }
+
+            var analysisData = new AnalysisData()
+            {
+                productCountShelling = productCountShelling,
+                voucherCountUsing = voucherCountUsing,
+                productQuantityInventory = productCountShelling,
+                custumerCountActive = custumerCountActive,
+                top5ProductSolds = top5ProductSolds,
+                analysisProfit12Month = analysisProfit12Month,
+                top5AccountPaids = top5AccountPaids,
+                totalBillMonth = totalBillMonth,
+            };
+            return analysisData;
         }
 
-        public async Task<List<Product>> SearchTop5Product(string search)
+        public async Task<List<Product>> SearchTop5Product(string? search)
         {
             return await _context.Products.Where(x => x.ProductName.Contains(search))
                                             .Take(5).Include(x => x.ProductImgs).ToListAsync();

@@ -15,12 +15,12 @@ namespace Intern.Controllers
             _services = services;
         }
 
-        [HttpGet("getanalysisshop")]
+        [HttpGet("getanalysisshopa")]
         public async Task<IActionResult> GetAnalysisData()
         {
             var result = await _services.GetAnalysisData();
             if (result == null)
-                return null;
+                return NotFound();
 
             return Ok(result);
         }
@@ -35,12 +35,9 @@ namespace Intern.Controllers
             return Ok(result);
         }
         [HttpGet("searchtop5product")]
-        public async Task<IActionResult> SearchTop5Product(string search)
+        public async Task<IActionResult> SearchTop5Product(string? search)
         {
             var result = await _services.SearchTop5Product(search);
-            if (result == null)
-                return NotFound();
-
             return Ok(result);
         }
         [HttpPost("createbillinshop")]
