@@ -1,4 +1,7 @@
-﻿using Intern.Services;
+﻿using Intern.Entities;
+using Intern.Services;
+using Intern.ViewModels.RemakeAdmin;
+using Intern.ViewModels.SaleAdmin;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +18,7 @@ namespace Intern.Controllers
             _services = services;
         }
 
-        [HttpGet("getanalysisshopa")]
+        [HttpGet("getanalysisshop")]
         public async Task<IActionResult> GetAnalysisData()
         {
             var result = await _services.GetAnalysisData();
@@ -56,6 +59,73 @@ namespace Intern.Controllers
             if (result == null)
                 return NotFound();
 
+            return Ok(result);
+        }
+        [HttpGet("addproduct2billdetail")]
+        public async Task<IActionResult> AddProduct2BillDetail(int idProduct, int idBill)
+        {
+            var result = await _services.AddProduct2BillDetail(idProduct, idBill);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("updatebilldetailquantity")]
+        public async Task<IActionResult> UpdateBillDetailQuantity(int idBillDetail, int quantity)
+        {
+            var result = await _services.UpdateBillDetailQuantity(idBillDetail, quantity);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpPost("remakeproduct")]
+        public async Task<IActionResult> RemakeProduct(RemakeProduct product)
+        {
+            var result = await _services.RemakeProduct(product);
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpPost("createproperty")]
+        public async Task<IActionResult> CreateProperty(CreateAndRemakeProperty request)
+        {
+            var result = await _services.CreateProperty(request);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpPut("remakeproperty")]
+        public async Task<IActionResult> RemakeProperty (CreateAndRemakeProperty request)
+        {
+            var result = await _services.RemakeProperty(request);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("getallbilltype")]
+        public async Task<IActionResult> GetAllBillType(int opt)
+        {
+            var result = await _services.GetAllBillType(opt);
+
+            return Ok(result);
+        }
+        [HttpGet("sales")]
+        public async Task<IActionResult> GetSales()
+        {
+            var result = await _services.GetSales();
+
+            return Ok(result);
+        }
+        [HttpPost("createsales")]
+        public async Task<IActionResult> CreateSales(CreateSaleRequest request)
+        {
+            var result = await _services.CreateSales(request);
+            if (result == 0)
+                return BadRequest();
             return Ok(result);
         }
     }

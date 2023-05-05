@@ -1,7 +1,11 @@
 ﻿using Intern.Entities;
 using Intern.ViewModels;
 using Intern.ViewModels.Analysis;
+using Intern.ViewModels.BillAdmin;
 using Intern.ViewModels.Order;
+using Intern.ViewModels.RemakeAdmin;
+using Intern.ViewModels.SaleAdmin;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Intern.Services
 {
@@ -12,5 +16,13 @@ namespace Intern.Services
         Task<List<Product>> SearchTop5Product(string? search);
         Task<Bill> CreateBillInShop(int idEmployee);
         Task<AllBillDetails> GetAllBillDetailOfBill(int idBill);
+        Task<int> AddProduct2BillDetail(int idProduct, int idBill);
+        Task<int> UpdateBillDetailQuantity(int idBillDetail, int quantity);
+        Task<Product> RemakeProduct(RemakeProduct product);
+        Task<int> CreateProperty(CreateAndRemakeProperty request);
+        Task<int> RemakeProperty(CreateAndRemakeProperty request);
+        Task<List<GetBillTypeRequest>> GetAllBillType(int opt);
+        Task<GetSaleResponse> GetSales();
+        Task<int> CreateSales(CreateSaleRequest request);
     }
 }

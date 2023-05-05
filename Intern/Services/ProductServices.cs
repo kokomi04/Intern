@@ -396,6 +396,7 @@ namespace Intern.Services
                         Quantity = accountBag.Quantity,
                     };
                     await _context.BillDetails.AddAsync(billDetail);
+                    _context.AccountBags.Remove(accountBag);
                     await _context.SaveChangesAsync();
                 }
 
