@@ -2,8 +2,10 @@
 using Intern.Services;
 using Intern.ViewModels.RemakeAdmin;
 using Intern.ViewModels.SaleAdmin;
+using Intern.ViewModels.Upload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Intern.Controllers
 {
@@ -41,6 +43,17 @@ namespace Intern.Controllers
         public async Task<IActionResult> SearchTop5Product(string? search)
         {
             var result = await _services.SearchTop5Product(search);
+            return Ok(result);
+        }
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload([FromForm] UploadRequest request)
+        {
+            //var json = JsonConvert.SerializeObject(request.data);
+            var data = JsonConvert.DeserializeObject<Data> (request.data);
+            var result = await _services.Upload(request, data);
+            if (result == 0)
+                return BadRequest();
+
             return Ok(result);
         }
         [HttpPost("createbillinshop")]

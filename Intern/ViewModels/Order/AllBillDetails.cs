@@ -1,4 +1,5 @@
 ﻿using Intern.Entities;
+using Intern.ViewModels.BillAdmin;
 
 namespace Intern.ViewModels.Order
 {

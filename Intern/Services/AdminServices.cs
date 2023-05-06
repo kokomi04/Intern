@@ -6,6 +6,7 @@ using Intern.ViewModels.BillAdmin;
 using Intern.ViewModels.Order;
 using Intern.ViewModels.RemakeAdmin;
 using Intern.ViewModels.SaleAdmin;
+using Intern.ViewModels.Upload;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace Intern.Services
                     BuyMethodId = 4,
                 };
 
-                
+
 
                 await _context.Bills.AddAsync(bill);
                 await _context.SaveChangesAsync();
@@ -48,7 +49,50 @@ namespace Intern.Services
                 return bill;
             }
         }
+        public async Task<int> Upload(UploadRequest request, Data data)
+        {
+            using(var trans =await _context.Database.BeginTransactionAsync())
+            {
+                byte[] file1, file2;
+                using (var stream = new MemoryStream())
+                {
+                    await request.file1.CopyToAsync(stream);
+                    file1 = stream.ToArray();
+                    await request.file2.CopyToAsync(stream);
+                    file2 = stream.ToArray();
+                }
 
+                var maxProductId = 0;
+                if (await _context.Products.CountAsync() > 0)
+                    maxProductId = await _context.Products.MaxAsync(x => x.ProductId);
+                var product = new Product()
+                {
+                    ProductId = maxProductId + 1,
+                    Price = data.ProductPrice,
+                    ShellPrice = data.ProductShellPrice,
+                    BrandId = data.Brand,
+                    ColorId = data.Color,
+                    ProducerId = data.Producer,
+                    ProductName = data.ProductName,
+                    ProductDetail = data.ProductDetail,
+                    SizeId = data.Size,
+                    Quantity = data.ProductQuantity,
+                    CategoryTypeId = data.category,
+                    ProductStatusId = 1,
+                    CreatedDate = DateTime.Now,
+                    ProductImgs = new List<ProductImgs>()
+                {
+                    new ProductImgs() {ProductImg = file1},
+                    new ProductImgs() {ProductImg = file2},
+                }
+                };
+                await _context.Products.AddAsync(product);
+                var result = await _context.SaveChangesAsync();
+                await trans.CommitAsync();
+                return result;
+            }
+            
+        }
 
         public async Task<AllBillDetails> GetAllBillDetailOfBill(int idBill)
         {
@@ -100,8 +144,9 @@ namespace Intern.Services
         {
             var bd = await _context.BillDetails.FindAsync(idBillDetail);
             if (bd == null) return 0;
-
+            var product = await _context.Products.FirstOrDefaultAsync(x => x.ProductId == bd.ProductId);
             bd.Quantity = quantity;
+            bd.Price = bd.Quantity * product.ShellPrice;
             _context.BillDetails.Update(bd);
             return await _context.SaveChangesAsync();
         }
@@ -219,7 +264,7 @@ namespace Intern.Services
             {
                 productCountShelling = productCountShelling,
                 voucherCountUsing = voucherCountUsing,
-                productQuantityInventory = productCountShelling,
+                productQuantityInventory = productQuantityInventory,
                 custumerCountActive = custumerCountActive,
                 top5ProductSold = top5ProductSolds,
                 analysisProfit12Month = analysisProfit12Month,
@@ -420,9 +465,9 @@ namespace Intern.Services
                 var voucher = await _context.BillSales.Include(x => x.Sales).Where(x => x.BillId == bill.BillId && x.Sales.SaleTypeId == 2).FirstOrDefaultAsync();
                 var billStatus = await _context.BillStatuses.FindAsync(bill.BillStatusId);
 
-                var billDetails = await _context.BillDetails.Where(x => x.BillId == bill.BillId).Include(x=>x.Product).ToListAsync();
+                var billDetails = await _context.BillDetails.Where(x => x.BillId == bill.BillId).Include(x => x.Product).ToListAsync();
 
-                var billDetailAnalyses = new List<BillDetailAnalyses>(); 
+                var billDetailAnalyses = new List<BillDetailAnalyses>();
                 foreach (var bd in billDetails)
                 {
                     var bda = new BillDetailAnalyses()
@@ -433,7 +478,7 @@ namespace Intern.Services
                         quantityInventory = bd.Product.Quantity,
                         quantity = bd.Quantity,
                         total = bd.Price,
-                        productImg = await _context.ProductImgs.Where(x => x.ProductId == bd.ProductId).Select(x=>x.ProductImg).FirstOrDefaultAsync(),
+                        productImg = await _context.ProductImgs.Where(x => x.ProductId == bd.ProductId).Select(x => x.ProductImg).FirstOrDefaultAsync(),
                     };
                     billDetailAnalyses.Add(bda);
                 }
@@ -453,7 +498,7 @@ namespace Intern.Services
                     notification = bill.BuyerNotification,
                     totalBill = await _context.BillDetails.Where(x => x.BillId == bill.BillId).SumAsync(x => x.Price),
                     shipVoucher = 1000, //voucherShip!=null? voucherShip.Sales.SalesInt : null,
-                    voucherVoucher = voucher!=null? voucher.Sales.SalesInt + voucher.Sales.SalesPercent : null,
+                    voucherVoucher = voucher != null ? voucher.Sales.SalesInt + voucher.Sales.SalesPercent : null,
                     billStatus = billStatus.BillStatusDetail,
                     buyMethod = buyMethod.BuyMethodName,
                     buyStatus = buyStatus,
@@ -495,11 +540,8 @@ namespace Intern.Services
                 SalesName = request.SalesName,
                 SalesPercent = request.SalesPercent,
                 SaleTypeId = request.SaleTypeId,
+                SalesStatusId = 1
             };
-            if (request.OpenDate < DateTime.Now && request.EndDate > DateTime.Now)
-                sales.SalesStatusId = 1;
-            else sales.SalesStatusId = 3;
-
             await _context.AddAsync(sales);
             return await _context.SaveChangesAsync();
         }

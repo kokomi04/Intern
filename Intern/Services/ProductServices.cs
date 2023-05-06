@@ -164,7 +164,7 @@ namespace Intern.Services
                 Address = acc.AccountDetailAddress,
                 Born = acc.AccountBorn,
                 RoleID = acc.RoleId,
-                Sdt = "0333961530",
+                Sdt = acc.Sdt,
                 ShipContacts = lstShipContacts
             };
             return kq;
@@ -193,6 +193,7 @@ namespace Intern.Services
                     RoleId = 3,
                     Role = await _context.Roles.FindAsync(3),
                     CreateDate = DateTime.Now,
+                    Sdt = request.sdt,
                 };
                 await _context.AddAsync(acc);
                 await _context.SaveChangesAsync();
@@ -210,7 +211,7 @@ namespace Intern.Services
             var accCus = new AccountCustom()
             {
                 Id = accountId,
-                sdt = "",
+                sdt = acc.Sdt,
                 address = acc.AccountDetailAddress,
                 born = acc.AccountBorn,
                 name = acc.AccountName,
@@ -241,6 +242,7 @@ namespace Intern.Services
             acc.AccountName = request.name;
             acc.AccountBorn = request.born;
             acc.AccountDetailAddress = request.address;
+            acc.Sdt = request.sdt;
 
             _context.Accounts.Update(acc);
             await _context.SaveChangesAsync();
