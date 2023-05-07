@@ -1,5 +1,6 @@
 ﻿using Intern.Entities;
 using Intern.Services;
+using Intern.ViewModels.BillAdmin;
 using Intern.ViewModels.RemakeAdmin;
 using Intern.ViewModels.SaleAdmin;
 using Intern.ViewModels.Upload;
@@ -49,7 +50,7 @@ namespace Intern.Controllers
         public async Task<IActionResult> Upload([FromForm] UploadRequest request)
         {
             //var json = JsonConvert.SerializeObject(request.data);
-            var data = JsonConvert.DeserializeObject<Data> (request.data);
+            var data = JsonConvert.DeserializeObject<Data>(request.data);
             var result = await _services.Upload(request, data);
             if (result == 0)
                 return BadRequest();
@@ -92,6 +93,62 @@ namespace Intern.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("deletebilldetail2")]
+        public async Task<IActionResult> DelBillDetail(int idBillDetail)
+        {
+            var result = await _services.DelBillDetail(idBillDetail);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+
+        [HttpPost("getpaybillrequest")]
+        public async Task<IActionResult> UpdatePayBill(BillPayRequest request)
+        {
+            var result = await _services.UpdatePayBill(request);
+            if (result == 0)
+                return BadRequest();
+            return Ok(result);
+        }
+        [HttpGet("printbill")]
+        public async Task<IActionResult> PrintBill(int idBill)
+        {
+            var result = await _services.PrintBill(idBill);
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+
+        [HttpPut("adminsetbill")]
+        public async Task<IActionResult> AdminSetBill(int opt, int idBill, int idEmployee)
+        {
+            var result = await _services.AdminSetBill(opt, idBill, idEmployee);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("getallholdingbill")]
+        public async Task<IActionResult> GetAllHoldingBill()
+        {
+            var result = await _services.GetAllHoldingBill();
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("findproductbyid")]
+        public async Task<IActionResult> FindProductById(int idProduct)
+        {
+            var result = await _services.FindProductById(idProduct);
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
         [HttpPost("remakeproduct")]
         public async Task<IActionResult> RemakeProduct(RemakeProduct product)
         {
@@ -111,7 +168,7 @@ namespace Intern.Controllers
             return Ok(result);
         }
         [HttpPut("remakeproperty")]
-        public async Task<IActionResult> RemakeProperty (CreateAndRemakeProperty request)
+        public async Task<IActionResult> RemakeProperty(CreateAndRemakeProperty request)
         {
             var result = await _services.RemakeProperty(request);
             if (result == 0)

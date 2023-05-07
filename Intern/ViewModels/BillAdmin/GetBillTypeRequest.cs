@@ -5,9 +5,9 @@
         public int billId { get; set; }
         public string billCode { get; set; }
         public DateTime CreateBill { get; set; }
-        public string customerName { get; set; }
-        public string reveceiName { get; set; }
-        public string reveceiSdt { get; set; }
+        public string? customerName { get; set; }
+        public string? reveceiName { get; set; }
+        public string? reveceiSdt { get; set; }
         public string shipMethodName { get; set; }
         public string? voucherCode { get; set; }
         public string? voucherShipCode { get; set; }
@@ -24,7 +24,7 @@
         public string reveceiMethod { get; set; }
         public string shipStatus { get; set; }
 
-        public string reveceiContact { get; set; }
+        public string? reveceiContact { get; set; }
 
         public int billStatusId { get; set; }
 

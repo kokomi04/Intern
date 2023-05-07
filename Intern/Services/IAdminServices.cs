@@ -20,6 +20,12 @@ namespace Intern.Services
         Task<AllBillDetails> GetAllBillDetailOfBill(int idBill);
         Task<int> AddProduct2BillDetail(int idProduct, int idBill);
         Task<int> UpdateBillDetailQuantity(int idBillDetail, int quantity);
+        Task<int> DelBillDetail(int idBillDetail);
+        Task<int> UpdatePayBill(BillPayRequest request);
+        Task<PrintBillResponse> PrintBill(int idBill);
+        Task<int> AdminSetBill(int opt, int idBill, int idEmployee);
+        Task<List<Bill>> GetAllHoldingBill();
+        Task<Product> FindProductById(int idProduct);
         Task<Product> RemakeProduct(RemakeProduct product);
         Task<int> CreateProperty(CreateAndRemakeProperty request);
         Task<int> RemakeProperty(CreateAndRemakeProperty request);

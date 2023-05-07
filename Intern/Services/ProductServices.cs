@@ -463,7 +463,7 @@ namespace Intern.Services
                         });
                     }
             }
-            return result;
+            return result.OrderByDescending(x=>x.Bill.CreateDate).ToList();
         }
 
         public async Task<bool> CancelBill(int billId, int type)
