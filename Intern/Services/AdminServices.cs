@@ -551,7 +551,7 @@ namespace Intern.Services
                     shipStatus = "Đang giao";
                     break;
                 case 3:
-                    listBill = await _context.Bills.Where(x => x.BillStatusId == 3 || x.BillStatusId == 4 || x.BillStatusId == 5).ToListAsync();
+                    listBill = await _context.Bills.Where(x => x.BillStatusId == 3).ToListAsync();
                     buyStatus = "Đã Thanh Toán";
                     shipStatus = "Đã Nhận Hàng";
                     break;
