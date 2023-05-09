@@ -4,9 +4,9 @@
     {
         public int shippedBillTotal;
         public int soldTotal;
-        public double profitBefore;
+        public int profitBefore;
         public int backBillTotal;
-        public double shipLossTotal;
-        public double resultProfit;
+        public int? shipLossTotal;
+        public int? resultProfit;
     }
 }

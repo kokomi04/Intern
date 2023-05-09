@@ -1,6 +1,12 @@
-﻿using Intern.Services;
+﻿using Intern.Entities;
+using Intern.Services;
+using Intern.ViewModels.BillAdmin;
+using Intern.ViewModels.RemakeAdmin;
+using Intern.ViewModels.SaleAdmin;
+using Intern.ViewModels.Upload;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Intern.Controllers
 {
@@ -20,7 +26,7 @@ namespace Intern.Controllers
         {
             var result = await _services.GetAnalysisData();
             if (result == null)
-                return null;
+                return NotFound();
 
             return Ok(result);
         }
@@ -35,11 +41,19 @@ namespace Intern.Controllers
             return Ok(result);
         }
         [HttpGet("searchtop5product")]
-        public async Task<IActionResult> SearchTop5Product(string search)
+        public async Task<IActionResult> SearchTop5Product(string? search)
         {
             var result = await _services.SearchTop5Product(search);
-            if (result == null)
-                return NotFound();
+            return Ok(result);
+        }
+        [HttpPost("upload")]
+        public async Task<IActionResult> Upload([FromForm] UploadRequest request)
+        {
+            //var json = JsonConvert.SerializeObject(request.data);
+            var data = JsonConvert.DeserializeObject<Data>(request.data);
+            var result = await _services.Upload(request, data);
+            if (result == 0)
+                return BadRequest();
 
             return Ok(result);
         }
@@ -59,6 +73,129 @@ namespace Intern.Controllers
             if (result == null)
                 return NotFound();
 
+            return Ok(result);
+        }
+        [HttpGet("addproduct2billdetail")]
+        public async Task<IActionResult> AddProduct2BillDetail(int idProduct, int idBill)
+        {
+            var result = await _services.AddProduct2BillDetail(idProduct, idBill);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("updatebilldetailquantity")]
+        public async Task<IActionResult> UpdateBillDetailQuantity(int idBillDetail, int quantity)
+        {
+            var result = await _services.UpdateBillDetailQuantity(idBillDetail, quantity);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+
+        [HttpGet("deletebilldetail2")]
+        public async Task<IActionResult> DelBillDetail(int idBillDetail)
+        {
+            var result = await _services.DelBillDetail(idBillDetail);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+
+        [HttpPost("getpaybillrequest")]
+        public async Task<IActionResult> UpdatePayBill(BillPayRequest request)
+        {
+            var result = await _services.UpdatePayBill(request);
+            if (result == 0)
+                return BadRequest();
+            return Ok(result);
+        }
+        [HttpGet("printbill")]
+        public async Task<IActionResult> PrintBill(int idBill)
+        {
+            var result = await _services.PrintBill(idBill);
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+
+        [HttpPut("adminsetbill")]
+        public async Task<IActionResult> AdminSetBill(int opt, int idBill, int idEmployee)
+        {
+            var result = await _services.AdminSetBill(opt, idBill, idEmployee);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("getallholdingbill")]
+        public async Task<IActionResult> GetAllHoldingBill()
+        {
+            var result = await _services.GetAllHoldingBill();
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("findproductbyid")]
+        public async Task<IActionResult> FindProductById(int idProduct)
+        {
+            var result = await _services.FindProductById(idProduct);
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpPost("remakeproduct")]
+        public async Task<IActionResult> RemakeProduct(RemakeProduct product)
+        {
+            var result = await _services.RemakeProduct(product);
+            if (result == null)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpPost("createproperty")]
+        public async Task<IActionResult> CreateProperty(CreateAndRemakeProperty request)
+        {
+            var result = await _services.CreateProperty(request);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpPut("remakeproperty")]
+        public async Task<IActionResult> RemakeProperty(CreateAndRemakeProperty request)
+        {
+            var result = await _services.RemakeProperty(request);
+            if (result == 0)
+                return BadRequest();
+
+            return Ok(result);
+        }
+        [HttpGet("getallbilltype")]
+        public async Task<IActionResult> GetAllBillType(int opt)
+        {
+            var result = await _services.GetAllBillType(opt);
+
+            return Ok(result);
+        }
+        [HttpGet("sales")]
+        public async Task<IActionResult> GetSales()
+        {
+            var result = await _services.GetSales();
+
+            return Ok(result);
+        }
+        [HttpPost("createsales")]
+        public async Task<IActionResult> CreateSales(CreateSaleRequest request)
+        {
+            var result = await _services.CreateSales(request);
+            if (result == 0)
+                return BadRequest();
             return Ok(result);
         }
     }
