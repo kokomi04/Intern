@@ -21,9 +21,9 @@ namespace Intern.Controllers
         }
 
         [HttpGet("nextpage")]
-        public async Task<IActionResult> GetProductDetails(int page)
+        public async Task<IActionResult> GetProductDetails([FromQuery]int pageIndex)
         {
-            var products = await _services.NextPage(page);
+            var products = await _services.NextPage(pageIndex);
             if (products == null)
                 return NotFound();
 
